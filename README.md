@@ -39,13 +39,22 @@ This video show the performnace changes after using adpative optimization.
 
 
 ### Hardwre switch
+For different cases, we deployed different hardware configuration for switch.  
+<!-- ![Firmware list](./media/figures/firmwares.png) -->
+The bigger DPU (larger size or higher frequency) consumes more power even if there is no AI inference tasks. Hence, using smaller DPU in low workloads can lower the power consumption.
+
+Currently, we delpoyed two sizes of DPUs: 1) B3136 and 2) B4096. The hardwre configuration are packaged into the different firmwares. 
+
+![Hardware configuration B3136](./media/figures/firmware-reid.png)  
+DPU size :B3136
+
+![Hardware configuration B4096](./media/figures/firmware-cmpk4096.png)  
+DPU size :B4096
 
 
 
 
-
-
-## Adaptive
+<!-- ## Adaptive
 1. Auto branch switch according to the input videos:
     - branch for cars
     - branch for people
@@ -62,7 +71,7 @@ This video show the performnace changes after using adpative optimization.
     - frequency of the DPU
     - number of DPUs
 
-## Use Model in the demo design
+## Use Model in the demo design -->
 
 
 ## Video pipelines in our demo:
@@ -92,7 +101,8 @@ In our demo, we included two kinds of model for scenerio classification:
 ### Main task branches:
 The main video pipelines are responible for operating AI models for corresponding scenors. In our demo, we implemented two typical scenarios in smart city system: 1) people and 2) car scenarios. In each scenario, we also intregarte a number of video pipelines for dynamical switch. 
 
-    (Figure: Pipeline of the management branch)
+![Video pipeline](./media/figures/pipelines.svg)
+(Figure: Pipeline of the management branch)
 
 the structures of the video pipeline are shown in the figure. Considering the different applications, the video pipeline can run one stage or two stage AI inference.
 
