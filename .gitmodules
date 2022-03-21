@@ -1,0 +1,3 @@
+[submodule "VVAS_CMPK"]
+	path = VVAS_CMPK
+	url = git@github.com:luyufan498/VVAS_CMPK.git
