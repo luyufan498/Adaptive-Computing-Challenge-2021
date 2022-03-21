@@ -53,7 +53,6 @@ DPU size :B4096
 
 
 
-
 <!-- ## Adaptive
 1. Auto branch switch according to the input videos:
     - branch for cars
@@ -72,6 +71,47 @@ DPU size :B4096
     - number of DPUs
 
 ## Use Model in the demo design -->
+
+## To run the demo
+
+Demo Includes parts: 1) video pipelines, 2) host program for management and 3) hardware firmwares. The details of the design is in the following sections. This section inlcudes the guide to start the demo.
+
+1. Download VVAS libs to kv260 (/opt/xilinx/lib/):
+    - [dpuinfer for AI inference to support new model and switch](./vvas_so_lib/libivas_xdpuinfer.so)
+    - [Crop for Openopse](./vvas_so_lib/libivas_crop_openopse.so)
+    - [To support Openopse](./vvas_so_lib/libivas_openpose.so)
+    - [Tracking update](./vvas_so_lib/libaa2_reidtracker.so)
+    - [Draw chart/wareform](./vvas_so_lib/libivas_sensor.so)
+    - [Draw running indicator](./vvas_so_lib/libivas_runindicater.so)
+    - [Draw segmentation](./vvas_so_lib/libivas_performancestatus.so)
+    - [Draw pose](./vvas_so_lib/libivas_drawpose.so)
+    - [Draw box/roadline](./vvas_so_lib/libivas_xboundingbox.so)
+
+2. Download new models to kv260 ():
+    
+
+
+2. Download [scripts to start video pipeline](./shell-scripts/gst_reid_4k.sh)
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## Video pipelines in our demo:
@@ -101,7 +141,7 @@ In our demo, we included two kinds of model for scenerio classification:
 ### Main task branches:
 The main video pipelines are responible for operating AI models for corresponding scenors. In our demo, we implemented two typical scenarios in smart city system: 1) people and 2) car scenarios. In each scenario, we also intregarte a number of video pipelines for dynamical switch. 
 
-![Video pipeline](./media/figures/pipelines.svg)
+![Video pipeline](./media/figures/pipelines.svg)  
 (Figure: Pipeline of the management branch)
 
 the structures of the video pipeline are shown in the figure. Considering the different applications, the video pipeline can run one stage or two stage AI inference.
