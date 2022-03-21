@@ -8,7 +8,7 @@
 ## Demo videos
 
 
-[test](./media/figures/people_top.jpg)
+![test](./media/figures/people_top.jpg)
 
 
 
