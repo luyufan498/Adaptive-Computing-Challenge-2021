@@ -79,27 +79,36 @@ Demo Includes parts: 1) video pipelines, 2) host program for management and 3) h
 0. Follow the [official instructions](https://xilinx.github.io/kria-apps-docs/main/build/html/index.html) to set up KV260 (smart camera and AIBox-ReID are needed).
 
 1. Download VVAS libs to kv260 (/opt/xilinx/lib/):
-    - [dpuinfer for AI inference to support new model and switch](./vvas_so_lib/libivas_xdpuinfer.so)
-    - [Crop for Openopse](./vvas_so_lib/libivas_crop_openopse.so)
-    - [To support Openopse](./vvas_so_lib/libivas_openpose.so)
-    - [Tracking update](./vvas_so_lib/libaa2_reidtracker.so)
-    - [Draw chart/wareform](./vvas_so_lib/libivas_sensor.so)
-    - [Draw running indicator](./vvas_so_lib/libivas_runindicater.so)
-    - [Draw segmentation](./vvas_so_lib/libivas_performancestatus.so)
-    - [Draw pose](./vvas_so_lib/libivas_drawpose.so)
-    - [Draw box/roadline](./vvas_so_lib/libivas_xboundingbox.so)
+    - dpuinfer for AI inference to support new model and switch: [libivas_xdpuinfer.so](./vvas_so_lib/libivas_xdpuinfer.so)
+    - Crop for Openopse: [libivas_crop_openopse.so](./vvas_so_lib/libivas_crop_openopse.so)
+    - To support Openopse: [libivas_openpose.so](./vvas_so_lib/libivas_openpose.so)
+    - Tracking update: [libaa2_reidtracker.so](./vvas_so_lib/libaa2_reidtracker.so)
+    - Draw chart/wareform: [libivas_sensor.so](./vvas_so_lib/libivas_sensor.so)
+    - Draw running indicator: [libivas_runindicater.so](./vvas_so_lib/libivas_runindicater.so)
+    - Draw segmentation: [libivas_performancestatus.so](./vvas_so_lib/libivas_performancestatus.so)
+    - Draw pose: [libivas_drawpose.so](./vvas_so_lib/libivas_drawpose.so)
+    - Draw box/roadline: [libivas_xboundingbox.so](./vvas_so_lib/libivas_xboundingbox.so)
+
+2. **IMPORTANT**: Update gstreamer plugin lib to support multiple inference channel (/usr/lib/).   
+    
+    - [libgstivasinpinfermeta-1.0.so.0](./gst_update/libgstivasinpinfermeta-1.0.so.0)
+    - [libgstivasinpinfermeta-1.0.so.0.1602.0](./gst_update/libgstivasinpinfermeta-1.0.so.0.1602.0)
+
+    *Note*: need sudo to overwrite original files.
 
 2. Download [new models](./models/models.zip) and extract to kv260 (/opt/xilinx/share/vitis_ai_library/):
 
 
-3. Download [new json file for VVAS configuration](./json_configuration/ivas.zip) and extract to kv260 (/opt/xilinx/share)
+3. Download [new json file for VVAS configuration](./json_configuration/ivas.zip) and extract to kv260 (/opt/xilinx/share)  
+    **Note**: Please find the separate section for configuration description. 
 
 4. Download [scripts to start video pipeline](./shell-scripts/gst_reid_4k.sh) to /home/scripts/.
     
     Now you should be able to run the video pipeline. 
 
     The shell scripts can take input parameter for different requirements:
-    
+
+
         Help:
         -f video file source
         -b (optional) segmentation use black background
@@ -112,7 +121,22 @@ Demo Includes parts: 1) video pipelines, 2) host program for management and 3) h
 
 
 5. Download [Host program](./host_program/video-management-%20example.ipynb) to kv260. Use jupyter to run it.
-
+    
+    Example use of python interfaces:
+    ```python
+    traffic_modelctr = kv260adpModelCtr()
+    # Set UI with pipe path
+    traffic_modelctr.setIndicaterUI('on',FFC_UI_BRANCH2)
+    traffic_modelctr.setIndicaterUI('off',FFC_UI_BRANCH1)
+    # SET branch with pipe path
+    traffic_modelctr.setDPUenable('on',FFC_DPU_BRANCH_CAR_CTR)
+    traffic_modelctr.setDPUenable('off',FFC_DPU_BRANCH_PEO_CTR)
+    # SET inference interval with pipe path
+    traffic_modelctr.setDPUInvteral(30,FFC_DPU_SEG_CTR)
+    # Create a ctr with pipe path and set new model
+    modelctr = kv260adpModelCtr("/home/petalinux/.temp/dpu_seg_rx")
+    modelctr.setNewModel("ENet_cityscapes_pt","SEGMENTATION","/opt/xilinx/share/vitis_ai_library/models/B3136/")
+    ```
 
 6. (Optional) load the hardware with the B4096 DPU: 
 
@@ -121,30 +145,18 @@ Demo Includes parts: 1) video pipelines, 2) host program for management and 3) h
 
 
 
+## Video pipelines in the demo:
+###  Architecture of the video pipeline and management branch:
+The management branch is responible for checking the scenerio of input videos. The structure of video pipeline is (1080P mode) as follow:
 
+![architecture of the video pipeline ](./media/figures/pipelinestructure.svg)  
+(Figure: video pipeline in 1080P mode.)
 
+As shown in the figure, the management branch runs as a asistant branch with the main task branch. Using a copyed stream from main branch, the management branch can check the input scenarios. 
 
+**In the 1080P mode, the inference information from different branch needs to be drawn on the same frame. However the original Meta Affixer plugin does not support conbination of inference results from different branches. it returns error, when there are muliple inference results. We modified the gstreamer plugin (libgstivasinpinfermeta) to support this feature. Now, the info in the master sink port will be kept, while others will be dropped.**
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Video pipelines in our demo:
-###  Management branch:
-The management branch is responible for checking the scenerio of input videos. The structure of the ,management branch is as follow:
-
-    (Figure: Pipeline of the management branch)
-    
-As shown in the figure, the management branch runs as a asistant branch with the main task branch. Using a copyed stream from main branch, the management branch can check the input scenarios. Considering that the scenairos will not change frequenctly, the inference runs every few seconds. The inference interval can be adjusted by pre-designed interfaces.
+Considering that the scenairos will not change frequenctly, the inference runs every few seconds. The inference interval can be adjusted by pre-designed interfaces.
     
 In our demo, we included two kinds of model for scenerio classification: 
 1. For segmentation 
@@ -213,35 +225,36 @@ In the car scenarios, the demo can run two task: 1) object detection and 2) car 
 
 
 
-### Host program
+## Host program
 
 To trigger dynamical switch, there is a python host program to interact with video pipeplines. Because the host program is a separate program, it use IPC to read infomation and send command. 
 
-    To use the named pipe to control the video pipeline, there are a few step:
-    1. Install the new library file (so) to replace the official plugins. 
-    2. Prepare the configuration file (json) to set communication methods.   
-    3. Use gstreamer to start a pipeline or use the my shell script to strat the video pipeline.
-    4. start the Python program to control the video pipeline by sending commands  
+To use the named pipe to control the video pipeline, there are a few step:
+1. Install the new library file (so) to replace the official plugins. 
+2. Prepare the configuration file (json) to set communication methods.   
+3. Use gstreamer to start a pipeline or use the my shell script to strat the video pipeline.
+4. start the Python program to control the video pipeline by sending commands  
 
 
-The the python example interfaces is as follow:
+All the control interfaces are designed in python. So you can easily control the video pipeline. Here I list the python APIs in our demo for controling the video pipelines. Please see [host example](./host_program/video-management-%20example.ipynb) for detailed usage.
+
 ```python
-traffic_modelctr = kv260adpModelCtr()
-# Set UI with pipe path
-traffic_modelctr.setIndicaterUI('on',FFC_UI_BRANCH2)
-traffic_modelctr.setIndicaterUI('off',FFC_UI_BRANCH1)
-# SET branch with pipe path
-traffic_modelctr.setDPUenable('on',FFC_DPU_BRANCH_CAR_CTR)
-traffic_modelctr.setDPUenable('off',FFC_DPU_BRANCH_PEO_CTR)
-# SET inference interval with pipe path
-traffic_modelctr.setDPUInvteral(30,FFC_DPU_SEG_CTR)
-# Create a ctr with pipe path and set new model
-modelctr = kv260adpModelCtr("/home/petalinux/.temp/dpu_seg_rx")
-modelctr.setNewModel("ENet_cityscapes_pt","SEGMENTATION","/opt/xilinx/share/vitis_ai_library/models/B3136/")
+class kv260adpModelCtr(object):    
+    def __init__(self,write_path="",*args, **kw):        
+    def setNewModel(self,modelname, modelclass, modelpath, write_path = ""):
+    def setNewREIDModel(self,modelname,modelpath,write_path = ""):
+    def setDPUInvteral(self,inverteral,write_path = ""):
+    def setDPUenable(self,enable,write_path = ""):
+    def setIndicaterUI(self,on,write_path = ""):
+    def getFPSfromFile(self, file):
+    def getSegmentationResult(self,file):
+
 ```
 
-#### inter-process communication (IPC)
-In our demo, there are three kinds of IPC to transfer data between host program and gstreamer video pipeline: 
+
+### Communication between plugins and the host:
+
+In our demo, there are three kinds of  Inter-process communication (IPC) to transfer data between host program and gstreamer video pipeline: 
 1. named pipe (fifo)
     named pipe is the main method to send control commonds to the video pipeline. The custom plugin reads new commonds from named pipe before processing the new frame. Users can set read or send named pipe for dpuinfer and draw plugins. Currently, it is the most stable method for communcation.
 
