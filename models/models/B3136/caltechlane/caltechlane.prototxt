@@ -1,0 +1,32 @@
+model {
+  name : "roadline"
+  kernel {
+     name: "roadline"
+     mean: 105.0
+     mean: 117.0
+     mean: 123.0
+     scale: 1.0
+     scale: 1.0
+     scale: 1.0
+  }
+  model_type : ROADLINE
+  roadline_param : {
+     layer_name: "type"
+     ratio:  8
+     ipm_width : 80
+     ipm_height: 60
+     ipm_left  : 5
+     ipm_right : 75
+     ipm_top   : 23.75
+     ipm_bottom: 50.0
+     ipm_interpolation: 0
+     ipm_vp_portion    : 0
+     focal_length_x: 61.8
+     focal_length_y: 68.8
+     optical_center_x: 40
+     optical_center_y: 30
+     camera_height: 2179.8
+     pitch: 14.0
+     yaw:  0.0
+   }
+}

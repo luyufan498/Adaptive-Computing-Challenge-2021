@@ -1,0 +1,21 @@
+{
+    "model-name":"yolo3_city",
+    "num-labels": 3,
+    "labels": [
+        {
+            "label": 0,
+            "name": "car",
+            "display_name": "car"
+        },
+        {
+            "label": 1,
+            "name": "person",
+            "display_name": "person"
+        },
+        {
+            "label": 2,
+            "name": "cycle",
+            "display_name": "cycle"
+        }    
+    ]
+}
