@@ -76,6 +76,8 @@ DPU size :B4096
 
 Demo Includes parts: 1) video pipelines, 2) host program for management and 3) hardware firmwares. The details of the design is in the following sections. This section inlcudes the guide to start the demo.
 
+0. Follow the [official instructions](https://xilinx.github.io/kria-apps-docs/main/build/html/index.html) to set up KV260 (smart camera and AIBox-ReID are needed).
+
 1. Download VVAS libs to kv260 (/opt/xilinx/lib/):
     - [dpuinfer for AI inference to support new model and switch](./vvas_so_lib/libivas_xdpuinfer.so)
     - [Crop for Openopse](./vvas_so_lib/libivas_crop_openopse.so)
@@ -87,13 +89,35 @@ Demo Includes parts: 1) video pipelines, 2) host program for management and 3) h
     - [Draw pose](./vvas_so_lib/libivas_drawpose.so)
     - [Draw box/roadline](./vvas_so_lib/libivas_xboundingbox.so)
 
-2. Download new models to kv260 ():
+2. Download [new models](./models/models.zip) and extract to kv260 (/opt/xilinx/share/vitis_ai_library/):
+
+
+3. Download [new json file for VVAS configuration](./json_configuration/ivas.zip) and extract to kv260 (/opt/xilinx/share)
+
+4. Download [scripts to start video pipeline](./shell-scripts/gst_reid_4k.sh) to /home/scripts/.
     
+    Now you should be able to run the video pipeline. 
 
-
-2. Download [scripts to start video pipeline](./shell-scripts/gst_reid_4k.sh)
+    The shell scripts can take input parameter for different requirements:
     
+        Help:
+        -f video file source
+        -b (optional) segmentation use black background
+        -r (optional) model for branch 1  [(reid), openopse]
+        -s (optional) to sync videos or not
 
+    Use the following command to run video pipeline:
+
+        sudo ./scripts/gst_reid_4k2.sh -f <video> -r <AI program>
+
+
+5. Download [Host program](./host_program/video-management-%20example.ipynb) to kv260. Use jupyter to run it.
+
+
+6. (Optional) load the hardware with the B4096 DPU: 
+
+        sudo xmutil unloadapp
+        sudo xmutil loadapp cmpk4096
 
 
 
