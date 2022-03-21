@@ -1,0 +1,23 @@
+{
+  "xclbin-location":"/usr/lib/dpu.xclbin",
+  "ivas-library-repo": "/opt/xilinx/lib/",
+  "element-mode":"inplace",
+  "kernels" :[
+    {
+      "library-name":"libivas_xdpuinfer.so",
+      "config": {
+        "model-name" : "yolov2_voc",
+        "model-class" : "YOLOV2",
+        "model-path" : "/opt/xilinx/share/vitis_ai_library/models/B3136",
+        "ffc_txpath":"/tmp/ivasfifo_tomain",
+        "ffc_rxpath":"/home/petalinux/.temp/dpu_yolo_rx",
+        "run_time_model" : false,
+        "need_preprocess" : true,
+        "performance_test" : false,
+        "enable": true,
+        "debug_level" : 0,
+        "branch_id":2
+      }
+    }
+  ]
+}

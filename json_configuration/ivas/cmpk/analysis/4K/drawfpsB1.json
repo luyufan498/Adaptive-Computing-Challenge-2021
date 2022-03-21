@@ -1,0 +1,54 @@
+{
+  "xclbin-location":"/usr/lib/dpu.xclbin",
+  "ivas-library-repo": "/opt/xilinx/lib",
+  "element-mode":"inplace",
+  "kernels" :[
+    {
+      "library-name":"libivas_sensor.so",
+      "config": {
+        "debug_level" : 0,
+        "debug_param": 30,
+        
+        "senor_description":"0:LPD_TMEP,1:FPD_TMEP,2:PL_TEMP,3:POWER,4:FPS. 5~6: custom data (long,float) based on path and scale",
+        "senor_mode":6,
+        "sensor_path":"/home/petalinux/.temp/fps_branch1",
+        "sensor_scale":1,
+
+        "enable_fps":false,
+        "fps_window_len":30,
+        "enable_fifocom":true,
+        "enable_fps_w2f":true,
+        "fps_write_path":"/home/petalinux/.temp/fps",
+        "ffc_tx":"/home/petalinux/.temp/pf_tx",
+        "ffc_rx":"/home/petalinux/.temp/pf_rx",
+        "ffc_description":"only work for fps",
+
+        "enable_info_overlay" :true,
+        "title":"FPS Branch1&2:",
+        "font_size" : 1.5,
+        "font" : 5,
+        "label_color" : { "blue" : 255, "green" : 255, "red" : 255 },
+        
+        
+        "enable_chart_overlay":true,
+        "enable_analysis_overlay":true,
+        "chart_y":0,
+        "chart_x":896,
+        "chart_width":1024,
+        "chart_height":256,
+        "chart_type":0,
+        "chart_perf_optimize":2,
+        "line_thickness" : 1,
+        "line_color" : { "blue" : 255, "green" : 200, "red" : 0 },
+        
+        "analysis_type": 2,
+        "legend_color" : { "blue" : 255, "green" : 200, "red" : 0 },
+
+        "sample_interval_ms":200,
+        "max_sample_points":64,
+        "max_display_value":60,
+        "min_display_value":5
+      }
+    }
+  ]
+}

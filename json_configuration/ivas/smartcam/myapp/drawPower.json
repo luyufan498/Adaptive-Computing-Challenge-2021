@@ -1,0 +1,48 @@
+{
+  "xclbin-location":"/usr/lib/dpu.xclbin",
+  "ivas-library-repo": "/opt/xilinx/lib",
+  "element-mode":"inplace",
+  "kernels" :[
+    {
+      "library-name":"libivas_sensor.so",
+      "config": {
+        "debug_level" : 0,
+        "debug_param": 30,
+        
+        "senor_description":"0:LPD_TMEP,1:FPD_TMEP,2:PL_TEMP,3:POWER,4:FPS. 5~6: custom data (long,float) based on path and scale",
+        "senor_mode":3,
+        "sensor_path":"/sys/class/hwmon/hwmon1/power1_input",
+        "sensor_scale":0.000001,
+
+        "enable_fps":true,
+        "fps_window_len":30,
+        "enable_fifocom":false,
+        "ffc_tx":"/home/petalinux/.temp/pf_tx",
+        "ffc_rx":"/home/petalinux/.temp/pf_rx",
+        "ffc_description":"only work for fps",
+
+        "enable_info_overlay" :true,
+        "title":"Power (W):",
+        "font_size" : 1,
+        "font" : 5,
+        "label_color" : { "blue" : 255, "green" : 255, "red" : 255 },
+        
+        "enable_chart_overlay":true,
+        "enable_analysis_overlay":true,
+        "chart_y":384,
+        "chart_x":1408,
+        "chart_width":512,
+        "chart_height":128,
+        "chart_type":1,
+        "chart_perf_optimize":2,
+        "line_thickness" : 1,
+        "line_color" : { "blue" : 0, "green" : 0, "red" : 255 },
+        "analysis_type": 2,
+        "sample_interval_ms":200,
+        "max_sample_points":64,
+        "max_display_value":15,
+        "min_display_value":5
+      }
+    }
+  ]
+}

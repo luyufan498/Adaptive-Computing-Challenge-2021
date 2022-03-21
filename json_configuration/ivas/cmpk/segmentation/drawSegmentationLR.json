@@ -1,0 +1,79 @@
+{
+  "xclbin-location":"/usr/lib/dpu.xclbin",
+  "ivas-library-repo": "/opt/xilinx/lib",
+  "element-mode":"inplace",
+  "kernels" :[
+    {
+      "library-name":"libivas_postsegmentation.so",
+      "config": {
+        "debug_level" : 0,
+        "debug_param": 30,
+        
+        "ffc_txpath":"/home/petalinux/.temp/segresults",
+
+        "enable_info_overlay" : true,
+        "font_size" : 2,
+        "font" : 5,
+        "thickness" : 2,
+        "label_color" : { "blue" : 255, "green" : 255, "red" : 255 },
+        
+        "info_x_offset":0,
+        "info_y_offset":1000,
+        
+        "enable_frame_overlay":true,
+        "y_offset_abs":0,
+        "x_offset_abs":0,
+        "overlay_width":1024,
+        "overlay_height":512,
+
+        "write_file_path":"/home/petalinux/.temp/segres",
+        "enable_w2f":true,
+
+        "classes" : [
+                {
+                "id":0,
+                "name" : "road",
+                "blue" : 38,
+                "green" : 71,
+                "red" : 139 
+                },
+                {
+                  "id":11,
+                  "name" : "person",
+                  "blue" : 128,
+                  "green" : 0,
+                  "red" : 0 
+                  },
+                {
+                  "id":13,
+                  "name" : "car",
+                  "blue" : 200,
+                  "green" : 255,
+                  "red" : 255
+                  },
+                {
+                  "id":10,
+                  "name" : "sky",
+                  "blue" : 255,
+                  "green" : 191,
+                  "red" : 0
+                  },
+                {
+                "id":8,
+                "name" : "vegetation",
+                "blue" : 0,
+                "green" : 255,
+                "red" : 69
+                },
+                {
+                "id":9,
+                "name" : "terrain",
+                "blue" : 139,
+                "green" : 60,
+                "red" : 17
+                }]
+
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "xclbin-location":"/lib/firmware/xilinx/kv260-aibox-reid/kv260-aibox-reid.xclbin",
+  "ivas-library-repo": "/opt/xilinx/lib/",
+  "element-mode":"inplace",
+  "kernels" :[
+    {
+      "library-name":"libivas_xdpuinfer.so",
+      "config": {
+          "model-name" : "refinedet_pruned_0_96",
+          "model-class" : "REFINEDET",
+          "model-path" : "/opt/xilinx/share/vitis_ai_library/models/kv260-aibox-reid",
+          "ffc_txpath":"/tmp/ivasfifo_tomain",
+          "ffc_rxpath":"/home/petalinux/.temp/dpu_refinedet_rx",
+          "run_time_model" : false,
+          "need_preprocess" : true,
+          "performance_test" : false,
+          "debug_level" : 3,
+          "branch_id": 1
+      }
+    }
+  ]
+}

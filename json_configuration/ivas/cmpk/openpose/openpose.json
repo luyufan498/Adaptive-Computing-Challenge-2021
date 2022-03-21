@@ -1,0 +1,16 @@
+{
+  "xclbin-location": "/usr/lib/dpu.xclbin",
+  "ivas-library-repo": "/opt/xilinx/lib/",
+  "element-mode": "passthrough",
+  "kernels": [
+    {
+      "library-name": "libivas_openpose2.so",
+      "config": {
+          "model-path": "/opt/xilinx/share/vitis_ai_library/models/B3136/",
+          "model-name": "sp_net",
+          "debug": 0
+      }
+    }
+  ]
+}
+

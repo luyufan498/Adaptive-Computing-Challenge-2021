@@ -1,0 +1,19 @@
+{
+  "xclbin-location":"/usr/lib/dpu.xclbin",
+  "ivas-library-repo": "/opt/xilinx/lib",
+  "element-mode":"inplace",
+  "kernels" :[
+    {
+      "library-name":"libivas_runindicater.so",
+      "config": {
+        "debug_level" : 0,
+        "debug_param": 30,
+        "default_status":0,
+        "x_pos":50,
+        "y_pos":50,
+        "width":64,
+        "ffc_rxpath":"/home/petalinux/.temp/runstatus2_rx"
+      }
+    }
+  ]
+}

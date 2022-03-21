@@ -1,0 +1,19 @@
+{
+  "xclbin-location":"/lib/firmware/xilinx/kv260-smartcam/kv260-smartcam.xclbin",
+  "ivas-library-repo": "/opt/xilinx/lib",
+  "kernels": [
+    {
+      "kernel-name": "pp_pipeline_accel:pp_pipeline_accel_1",
+      "library-name": "libivas_xpp.so",
+      "config": {
+        "debug_level" : 3,
+        "mean_r": 103.53,
+        "mean_g": 116.28,
+        "mean_b": 123.675,
+        "scale_r": 0.557728,
+        "scale_g": 0.560224,
+        "scale_b": 0.547992
+      }
+    }
+  ]
+}

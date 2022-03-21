@@ -1,0 +1,14 @@
+{
+  "xclbin-location": "/usr/lib/dpu.xclbin",
+  "ivas-library-repo": "/opt/xilinx/lib/",
+  "element-mode": "passthrough",
+  "kernels": [
+    {
+      "library-name": "libivas_crop_modified.so",
+      "config": {
+        "reszie_width":128,
+        "resize_height":224
+      }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "xclbin-location":"/lib/firmware/xilinx/kv260-smartcam/kv260-smartcam.xclbin",
+  "ivas-library-repo": "/opt/xilinx/lib/",
+  "element-mode":"inplace",
+  "kernels" :[
+    {
+      "library-name":"libivas_xdpuinfer.so",
+      "config": {
+        "model-name" : "SemanticFPN_cityscapes_256_512",
+        "model-class" : "SEGMENTATION",
+        "model-path" : "/opt/xilinx/share/vitis_ai_library/models/B3136",
+        "run_time_model" : true,
+        "need_preprocess" : true,
+        "performance_test" : true,
+        "debug_level" : 0,
+        "ffc_txpath":"/tmp/ivasfifo_tomain",
+        "ffc_rxpath":"/home/petalinux/.temp/dpu_seg_rx",
+        "interval_frames":3,
+        "buff_en":false,
+        "branch_id":10
+      }
+    }
+  ]
+}

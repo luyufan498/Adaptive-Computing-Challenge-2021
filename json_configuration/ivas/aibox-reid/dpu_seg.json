@@ -1,0 +1,31 @@
+{
+  "xclbin-location":"/usr/lib/dpu.xclbin",
+  "ivas-library-repo": "/opt/xilinx/lib/",
+  "element-mode":"inplace",
+  "kernels" :[
+    {
+      "library-name":"libivas_cmpkdpu.so",
+      "config": {
+        "model-name" : "SemanticFPN_cityscapes_256_512",
+        "model-class" : "SEGMENTATION",
+        "model-path" : "/opt/xilinx/share/vitis_ai_library/models/B3136",
+        "run_time_model" : true,
+        "need_preprocess" : true,
+        "performance_test" : true,
+        "debug_level" : 0,
+        "ffc_txpath":"/tmp/ivasfifo_tomain",
+        "ffc_rxpath":"/home/petalinux/.temp/dpu_seg_rx",
+        "target_fps":10,
+        "interval_frames":30,
+        "model-lists":[
+          { 
+            "model-name":"yolov2_voc",
+            "model-class":"YOLOV2",
+            "model-priority":1
+          }
+        ]
+
+      }
+    }
+  ]
+}

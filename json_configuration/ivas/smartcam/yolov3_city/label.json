@@ -1,0 +1,107 @@
+{
+    "model-name":"yolo3_voc",
+    "num-labels": 20,
+    "labels": [
+        {
+            "label": 0,
+            "name": "aeroplane",
+            "display_name": "aeroplane"
+        },
+        {
+            "label": 1,
+            "name": "bicycle",
+            "display_name": "bicycle"
+        },
+        {
+            "label": 2,
+            "name": "bird",
+            "display_name": "bird"
+        },
+        {
+            "label": 3,
+            "name": "boat",
+            "display_name": "boat"
+        },
+        {
+            "label": 4,
+            "name": "bottle",
+            "display_name": "bottle"
+        },
+        {
+            "label": 5,
+            "name": "bus",
+            "display_name": "bus"
+        },
+        {
+            "label": 6,
+            "name": "car",
+            "display_name": "car"
+        },
+        {
+            "label": 7,
+            "name": "cat",
+            "display_name": "cat"
+        },
+        {
+            "label": 8,
+            "name": "chair",
+            "display_name": "chair"
+        },
+        {
+            "label": 9,
+            "name": "cow",
+            "display_name": "cow"
+        },
+        {
+            "label": 10,
+            "name": "diningtable",
+            "display_name": "diningtable"
+        },
+        {
+            "label": 11,
+            "name": "dog",
+            "display_name": "dog"
+        },
+        {
+            "label": 12,
+            "name": "horse",
+            "display_name": "horse"
+        },
+        {
+            "label": 13,
+            "name": "motorbike",
+            "display_name": "motorbike"
+        },
+        {
+            "label": 14,
+            "name": "person",
+            "display_name": "person"
+        },
+        {
+            "label": 15,
+            "name": "pottedplant",
+            "display_name": "pottedplant"
+        },
+        {
+            "label": 16,
+            "name": "sheep",
+            "display_name": "sheep"
+        },
+        {
+            "label": 17,
+            "name": "sofa",
+            "display_name": "sofa"
+        },
+        {
+            "label": 18,
+            "name": "train",
+            "display_name": "train"
+        },
+        {
+            "label": 19,
+            "name": "tvmonitor",
+            "display_name": "tvmonitor"
+        }
+        
+    ]
+}
