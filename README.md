@@ -251,14 +251,11 @@ In the car scenarios, the demo can run two task: 1) object detection and 2) car 
 
 
 
-### The plugin to get and draw realtime data on frames
+## The plugin to get and draw realtime data on frames
 
 
 
 ![sensor](./media/gifs/chart.gif)
-
-
-    
 
 
 In our demo, we designed a dedicated plugin lib (libivas_xdpuinfer.so) to get data and draw waveform. Please see ***Appendix*** section for detailed configuration.
@@ -331,11 +328,10 @@ In our demo, there are three kinds of  Inter-process communication (IPC) to tran
 
 
 
-### Generate Models
-#### Use Models from Model Zoo
-#### Tranning CarID
-#### OFA model
-
+## Generate Models
+### Use Models from Model Zoo
+### Tranning CarID
+### OFA model
 
 
 
