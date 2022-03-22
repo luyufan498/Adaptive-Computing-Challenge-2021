@@ -63,6 +63,10 @@ DPU size :B3136
 ![Hardware configuration B4096](./media/figures/firmware-cmpk4096.png)  
 DPU size :B4096
 
+About the details of different hardware configuration and performance adjustment please see our previous project： h
+ttps://www.hackster.io/378085/adaptive-deep-learning-hardware-for-video-analytics-f8d064
+
+![Hardware switch](https://github.com/luyufan498/Adaptive-deep-learning-hardware/raw/main/pic/system.png)
 
 
 <!-- ## Adaptive
