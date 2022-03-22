@@ -81,7 +81,7 @@ Demo Includes parts: 1) video pipelines, 2) host program for management and 3) h
 1. Download VVAS libs to kv260 (/opt/xilinx/lib/):
     - dpuinfer for AI inference to support new model and switch: [libivas_xdpuinfer.so](./vvas_so_lib/libivas_xdpuinfer.so)
     - Crop for Openopse: [libivas_crop_openopse.so](./vvas_so_lib/libivas_crop_openopse.so)
-    - To support Openopse: [libivas_openpose.so](./vvas_so_lib/libivas_openpose.so)
+    - To support Openopse: [libivas_openpose.so](./vvas_so_lib/libivas_openpose2.so)
     - Tracking update: [libaa2_reidtracker.so](./vvas_so_lib/libaa2_reidtracker.so)
     - Draw chart/wareform: [libivas_sensor.so](./vvas_so_lib/libivas_sensor.so)
     - Draw running indicator: [libivas_runindicater.so](./vvas_so_lib/libivas_runindicater.so)
@@ -152,9 +152,19 @@ The management branch is responible for checking the scenerio of input videos. T
 ![architecture of the video pipeline ](./media/figures/pipelinestructure.svg)  
 (Figure: video pipeline in 1080P mode.)
 
-As shown in the figure, the management branch runs as a asistant branch with the main task branch. Using a copyed stream from main branch, the management branch can check the input scenarios. 
-
 **In the 1080P mode, the inference information from different branch needs to be drawn on the same frame. However the original Meta Affixer plugin does not support conbination of inference results from different branches. it returns error, when there are muliple inference results. We modified the gstreamer plugin (libgstivasinpinfermeta) to support this feature. Now, the info in the master sink port will be kept, while others will be dropped.**
+
+
+![architecture of the video pipeline 4k ](./media/figures/pipelinestructure4k.svg)  
+
+(Figure: video pipeline in 4K mode.)
+
+**In the 4K mode, there is a separate branch (1090p) to draw waveform and UI.**
+
+
+
+As shown in the figures, the management branch runs as a asistant branch with the main task branch. Using a copyed stream from main branch, the management branch can check the input scenarios. 
+
 
 Considering that the scenairos will not change frequenctly, the inference runs every few seconds. The inference interval can be adjusted by pre-designed interfaces.
     
@@ -180,8 +190,7 @@ The main video pipelines are responible for operating AI models for correspondin
 ![Video pipeline](./media/figures/pipelines.svg)  
 (Figure: Pipeline of the management branch)
 
-the structures of the video pipeline are shown in the figure. Considering the different applications, the video pipeline can run one stage or two stage AI inference.
-
+the structures of the video pipeline are shown in the figure. Considering the different applications, the video pipeline can run one stage or two stage AI inference. 'Pipeline (a)' represents a typical one stage AI application (e.g. object detection and segmentation), where there is only one AI model to conduct the inference once per frame. 'Pipeline (b)' represents a two-stage AI application (e.g. tracking, REID and car plates detection), where there are two AI models ruining simultaneously and the second one may run multiple times due the detection results from the first one.
 
 #### Branch for people scenarios:
 In people scenarios, the demo can run three kinds of task: 1) people detection, 2) REID and 3) openopse, and there are three kinds of models are used in the demo.
@@ -191,7 +200,7 @@ In people scenarios, the demo can run three kinds of task: 1) people detection, 
     - cf_SPnet_aichallenger_224_128_0.54G_2.0
 
 
-#### Bracn for car scenarios:
+#### Branch for car scenarios:
 In the car scenarios, the demo can run two task: 1) object detection and 2) car track.
     
 1. yolo 
@@ -206,10 +215,10 @@ In the car scenarios, the demo can run two task: 1) object detection and 2) car 
 2. CarID
     We traned our own model for carid.
     ********
-    - RN18_08
-    - RN18_06
-    - RN18_04
-    - RN18_02
+    - RN18_08 is the smallest model in our demo. 08 means 80% of the weights was pruned   [B3136](./models/models/B3136/carid/RN18_08/RN18_08.xmodel)
+    - RN18_06 [B3136](./models/models/B3136/carid/RN18_06/RN18_06.xmodel)
+    - RN18_04 [B3136](./models/models/B3136/carid/RN18_04/RN18_04.xmodel)
+    - RN18_02 [B3136](./models/models/B3136/carid/RN18_02/RN18_02.xmodel)
 
 3. OFA (Test)
 
@@ -255,14 +264,18 @@ class kv260adpModelCtr(object):
 ### Communication between plugins and the host:
 
 In our demo, there are three kinds of  Inter-process communication (IPC) to transfer data between host program and gstreamer video pipeline: 
-1. named pipe (fifo)
-    named pipe is the main method to send control commonds to the video pipeline. The custom plugin reads new commonds from named pipe before processing the new frame. Users can set read or send named pipe for dpuinfer and draw plugins. Currently, it is the most stable method for communcation.
 
-2. file
-    for convenience, it is supported to used file to report video pipeline status. For example. our plugin can output the segmentation results to a file for further analysis. Writing file cost more time, but it is easy for host program to access. 
+1. Named Pipe (fifo):  
+    
+    Named pipe is the main method in our demo to communicate with VVAS plugins. Our custom plugins read new commonds from the named pipe. The path of named pipe can be set in the configuration json. Currently in our demo, it is the most reponsible method to send commands. 
 
-3. shared memory
-    Python does not support shared memory natively. In our demo, it is used between pipelines to share information between different branches. 
+2. File:
+
+    For convenience, it is also supported to used file to report running status of the VVAS processing pipeline. For example, our plugin can output the segmentation results to a file for further analysis. The path of the output file can be set in the configuration. Note: Alougth it is easy for host program to access, writing file does cost more time. 
+
+3. Shared Memory
+
+    Python does not support ***shared memory*** natively to communicate with VVAS plugins. In our demo, it is used to tranfer data between the plugins in different video processing branches.
 
 
 
@@ -272,9 +285,292 @@ In our demo, there are three kinds of  Inter-process communication (IPC) to tran
 #### OFA model
 
 
-## Modification in VVAS and Gst:
 
-### dpuinfer plugin for supporting new models
+
+# Appendix
+
+## Configuration of the Json file for pugin libs
+Here we only list the most import libs, please see [json example](./json_configuration/) for other libs. 
+
+
+### libivas_xdpuinfer.so
+
+```json
+{
+  "xclbin-location":"/lib/firmware/xilinx/kv260-smartcam/kv260-smartcam.xclbin",
+  "ivas-library-repo": "/opt/xilinx/lib/",
+  "element-mode":"inplace",
+  "kernels" :[
+    {
+      "library-name":"libivas_xdpuinfer.so",
+      "config": {
+        "model-name" : "SemanticFPN_cityscapes_256_512",
+        "model-class" : "SEGMENTATION",
+        "model-path" : "/opt/xilinx/share/vitis_ai_library/models/B3136",
+        "run_time_model" : true,
+        "need_preprocess" : true,
+        "performance_test" : true,
+        "debug_level" : 0,
+        "ffc_txpath":"/tmp/ivasfifo_tomain",
+        "ffc_rxpath":"/home/petalinux/.temp/dpu_seg_rx",
+        "interval_frames":3,
+        "buff_en":false,
+        "branch_id":10
+      }
+    }
+  ]
+}
+```
+libivas_xdpuinfer.so is modified from VVAS example. Hence we only add explaination of new added key:
+
+| Key        | value             | description | 
+| ---------- | ----------------- | ----------- | 
+| ffc_txpath | path of fifo file | Send data from plugins   |    
+| ffc_rxpath | path of fifo file | Send data to   plugins   |
+| model-class |                 | Two new added class: SEGMENTATION and ROADLINE |
+| interval_frames | number of frames   | start interval, it can be set by the command in runtime|
+| buff_en | true/false | buffer the inference result of not during the Ai inference interval. Not suitable for segmentation, because it has been included in libivas_postsegmentation.so |
+| branch_id | int | unique ID of branch  for following plugin to recognize |
+
+
+
+
+### libivas_xdpuinfer.so
+
+
+
+```json
+{
+  "xclbin-location":"/usr/lib/dpu.xclbin",
+  "ivas-library-repo": "/opt/xilinx/lib",
+  "element-mode":"inplace",
+  "kernels" :[
+    {
+      "library-name":"libivas_postsegmentation.so",
+      "config": {
+        "debug_level" : 0,
+        "debug_param": 30,
+        
+        "ffc_txpath":"/home/petalinux/.temp/segresults",
+
+        "enable_info_overlay" : true,
+        "font_size" : 2,
+        "font" : 5,
+        "thickness" : 2,
+        "label_color" : { "blue" : 255, "green" : 255, "red" : 255 },
+        
+        "info_x_offset":100,
+        "info_y_offset":1000,
+        
+        "enable_frame_overlay":true,
+        "y_offset_abs":0,
+        "x_offset_abs":0,
+        "overlay_width":1920,
+        "overlay_height":1080,
+
+        "write_file_path":"/home/petalinux/.temp/segres",
+        "enable_w2f":true,
+
+        "classes" : [
+                {
+                "id":0,
+                "name" : "road",
+                "blue" : 38,
+                "green" : 71,
+                "red" : 139 
+                },
+                {
+                  "id":11,
+                  "name" : "person",
+                  "blue" : 128,
+                  "green" : 0,
+                  "red" : 0 
+                  },
+                {
+                  "id":13,
+                  "name" : "car",
+                  "blue" : 200,
+                  "green" : 255,
+                  "red" : 255
+                  },
+                {
+                  "id":10,
+                  "name" : "sky",
+                  "blue" : 255,
+                  "green" : 191,
+                  "red" : 0
+                  },
+                {
+                "id":8,
+                "name" : "vegetation",
+                "blue" : 0,
+                "green" : 255,
+                "red" : 69
+                },
+                {
+                "id":9,
+                "name" : "terrain",
+                "blue" : 139,
+                "green" : 60,
+                "red" : 17
+                }]
+
+      }
+    }
+  ]
+}
+
+```
+
+
+
+| Key        | value             | description | 
+| ---------- | ----------------- | ----------- | 
+| ffc_txpath | path of fifo file | Send data from plugins   |    
+| ffc_rxpath | path of fifo file | Send data to   plugins   |
+| enable_info_overlay | true / false   | draw string or not |
+| info_x_offset | int | relative offset of the string    |
+| info_y_offset | int | relative offset of the string    |
+| enable_frame_overlay | true / false  | draw segmentation result or not |
+| y_offset_abs | int  |  absolute offset of the segmentation overlay |
+| x_offset_abs | int  |  absolute offset of the segmentation overlay |
+| overlay_width | int  | width of the segmentation overlay |
+| overlay_height | int  |  height of the segmentation overlay |
+| write_file_path | path  | path of output file (only the classification result) |
+| enable_w2f | true/false | enable output file or not|
+| classes |  | the pixel color of the segmentation overlay. If you leave it empty, nothing will be drawn |
+
+
+
+
+
+### libivas_runindicater.so
+
+It is just a UI plugin to indicate if the branch is running.
+
+```json
+{
+  "xclbin-location":"/usr/lib/dpu.xclbin",
+  "ivas-library-repo": "/opt/xilinx/lib",
+  "element-mode":"inplace",
+  "kernels" :[
+    {
+      "library-name":"libivas_runindicater.so",
+      "config": {
+        "debug_level" : 0,
+        "debug_param": 30,
+        "default_status":1,
+        "x_pos":50,
+        "y_pos":50,
+        "width":100,
+        "ffc_rxpath":"/home/petalinux/.temp/runstatus1_rx"
+      }
+    }
+  ]
+}
+
+```
+
+| Key        | value             | description | 
+| ---------- | ----------------- | ----------- | 
+| default_status |  1 / 0  | 1:run, 0:stop|
+| x_pos | | |
+| y_pos | | |
+| width | | diameter or width |
+| ffc_rxpath | path of fifo file | Send data to   plugins   |
+
+
+### libivas_sensor.so
+
+```json
+{
+  "xclbin-location":"/usr/lib/dpu.xclbin",
+  "ivas-library-repo": "/opt/xilinx/lib",
+  "element-mode":"inplace",
+  "kernels" :[
+    {
+      "library-name":"libivas_sensor.so",
+      "config": {
+        "debug_level" : 0,
+        "debug_param": 30,
+        
+        "senor_description":"0:LPD_TMEP,1:FPD_TMEP,2:PL_TEMP,3:POWER,4:FPS. 5~6: custom data (long,float) based on path and scale",
+        "senor_mode":1,
+        "sensor_path":"/sys/class/hwmon/hwmon1/power1_input",
+        "sensor_scale":0.000001,
+
+        "enable_fps":true,
+        "fps_window_len":30,
+        "enable_fifocom":false,
+        "ffc_tx":"/home/petalinux/.temp/pf_tx",
+        "ffc_rx":"/home/petalinux/.temp/pf_rx",
+        "ffc_description":"only work for fps",
+
+        "enable_info_overlay" :true,
+        "title":"FPD Temp (C):",
+        "font_size" : 1,
+        "font" : 5,
+        "label_color" : { "blue" : 255, "green" : 255, "red" : 255 },
+        
+        "enable_chart_overlay":true,
+        "enable_analysis_overlay":true,
+        "chart_y":512,
+        "chart_x":896,
+        "chart_width":512,
+        "chart_height":128,
+        "chart_type":1,
+        "chart_perf_optimize":2,
+        "line_thickness" : 1,
+        "line_color" : { "blue" : 0, "green" : 200, "red" : 200 },
+
+        "sample_interval_ms":500,
+        "max_sample_points":32,
+        "max_display_value":100,
+        "min_display_value":0
+      }
+    }
+  ]
+}
+
+```
+
+
+| Key        | value             | description | 
+| ---------- | ----------------- | ----------- | 
+| senor_mode | 0 - 6 |0:LPD_TMEP,1:FPD_TMEP,2:PL_TEMP,3:POWER,4:FPS. 5~6: custom data (long,float) based on path and scale |
+| sensor_path | path  | Read data (e.g. power and temperature) from file.  Only works when senor mode is 5 or 6.  Very usefull for reading proc file system in Linux.|
+| sensor_scale |float | Scale of the value from the file. For example, if you wan do a power unit conversion from microwatt to watt, you can put 0.001 here  |
+| | | |
+| enable_fps | bool | This plugin can also report fps of the current branch |
+| fps_window_len | int  | Number of point for calculating the average fps  |
+| enable_fifocom | bool | Use named pipe to report fps |
+| ffc_tx |  | File path of the pipe |
+| | | |
+| enable_info_overlay | bool | Draw tile on frames|
+| title | | Title of the chart
+| | |  |
+| enable_chart_overlay | bool | Draw chart or not|
+| enable_analysis_overlay| bool | Draw realtime data|
+| chart_y | int | |
+| chart_x | int | |
+| chart_width| int  | |
+| chart_height| int  | |
+| chart_type| 0 / 1  | Support 2 types: 0: filled and 1: line |
+| chart_perf_optimize | 0,1,2,3,4 | Different optimization methods  |
+||||
+| sample_interval_ms | int | |
+| max_sample_points | int | |
+| max_display_value | float | |
+| min_display_value | float | |
+
+
+
+
+
+
+
+
+<!-- 
 The DPU-infer plugins are modified to support new models and the features of realtime adjustment.
 
 1. New models:
@@ -449,7 +745,7 @@ The test branch:
     - roadline
     - openpose
 
-6. FFC & MMSHARE & FILE
+6. FFC & MMSHARE & FILE -->
 
 
 
