@@ -9,31 +9,28 @@
 
 
 ### Branch switch for different scenarios
-<center>
 
 ![Scenario switch](./media/gifs/scenarioswitch.gif)  
 
-</center>
+
 Using crocessponding AI branch for different scenairos.
 - Branch 0 (left top): for scenairo detection.
 - Branch 1 (left bottom): enable in people scenairos.
 - Branch 2 (right bottom): enable in car scenairos.
 
 ###  Inference interval
-<center>
 
 ![Inferece interval](./media/gifs/Inferenceinterval.gif)  
 
-</center>
+
 https://youtu.be/EY3WWD4jYp4  
 Realtime adjustment of inference interval in Jupyter.
 
 ### Model size
-<center>
 
 ![Model size](./media/gifs/adjustmodelsize.gif)  
 
-</center>
+
 https://youtu.be/rI5IlkQ1GYE  
 Running applications tracking for cars: Yolo + CarID   
 Realtime adjustment of Model size. There are 4 different model size of CarID.  
@@ -41,11 +38,11 @@ The fps increases when using smaller model.
 
 
 ### Adaptive optimization
-<center>
+
 
 ![Adaptive optimization](./media/gifs/KV260-optimzation.gif)  
 
-</center>
+
 https://youtu.be/lOm2LP5qe-M  
 This video show the performnace changes after using adpative optimization. 
 - Branch 0 (Segmentation):  the inference interval increases (1->5) for less performace cost. 
@@ -252,11 +249,11 @@ In the car scenarios, the demo can run two task: 1) object detection and 2) car 
 
 ### The plugin to get and draw realtime data on frames
 
-<center>
+
 
 ![sensor](./media/gifs/chart.gif)
 
-</center>
+
     
 
 
