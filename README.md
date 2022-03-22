@@ -9,20 +9,31 @@
 
 
 ### Branch switch for different scenarios
+<center>
 
 ![Scenario switch](./media/gifs/scenarioswitch.gif)  
+
+</center>
 Using crocessponding AI branch for different scenairos.
 - Branch 0 (left top): for scenairo detection.
 - Branch 1 (left bottom): enable in people scenairos.
 - Branch 2 (right bottom): enable in car scenairos.
 
 ###  Inference interval
+<center>
+
 ![Inferece interval](./media/gifs/Inferenceinterval.gif)  
+
+</center>
 https://youtu.be/EY3WWD4jYp4  
 Realtime adjustment of inference interval in Jupyter.
 
 ### Model size
+<center>
+
 ![Model size](./media/gifs/adjustmodelsize.gif)  
+
+</center>
 https://youtu.be/rI5IlkQ1GYE  
 Running applications tracking for cars: Yolo + CarID   
 Realtime adjustment of Model size. There are 4 different model size of CarID.  
@@ -30,7 +41,11 @@ The fps increases when using smaller model.
 
 
 ### Adaptive optimization
+<center>
+
 ![Adaptive optimization](./media/gifs/KV260-optimzation.gif)  
+
+</center>
 https://youtu.be/lOm2LP5qe-M  
 This video show the performnace changes after using adpative optimization. 
 - Branch 0 (Segmentation):  the inference interval increases (1->5) for less performace cost. 
@@ -231,6 +246,42 @@ In the car scenarios, the demo can run two task: 1) object detection and 2) car 
 3) car/traffic branch
     yolo voc2 ()(model zoo & offically supported)
     carID (5 different sizes) (self made & offically supported)  
+
+
+
+
+### The plugin to get and draw realtime data on frames
+
+<center>
+
+![sensor](./media/gifs/chart.gif)
+
+</center>
+    
+
+
+In our demo, we designed a dedicated plugin lib (libivas_xdpuinfer.so) to get data and draw waveform. Please see ***Appendix*** section for detailed configuration.
+
+1. Sample data
+
+    The fist functionality of this lib is getting platform status data. Currently, this lib supports 7 different data sources: 5 preset sources (lpd temperature, fpd temperature, total power, PL temperature and fps) and 2 custom sources. 
+    
+    When using Preset data sources except fps, the plugin will read the proc file in the petalinux system to get the platform status. 
+    
+    When using custom data sources, the plugin will read the data from a custom file. In this way, users can display custom data or use it in other boards (we have tested it in ZCU104). 
+
+    FPS is a spacial data sources. Plugin calculates the average fps of the current video processing branch. However it can not get the fps information from other branches, which is inconvenient in 4K mode. In our demo, the fps data can be output to a file, so that the plugin in display branch can read it by using custom data sources. 
+    
+
+2. Draw chart
+
+    Another functionality of this lib is to draw waveforms with acceptable performance cost. As shown in the figure, lib can draw the waveform in two different modes: 1) filled mode and 2) line mode. The title and realtime data can also be drawn on the frames.
+    
+    Due CPU costs of Draw, we also provde a number of paramenters for optimization. It is supproted to disable the title, data and overlay. There is also a optimization option for this lib, so that you can draw half of pixels only on UV planes to lower the costs. In the best case, filled mode costs 150 us, while the line mode costs 50 us.  
+   
+
+
+
 
 
 
@@ -481,6 +532,7 @@ It is just a UI plugin to indicate if the branch is running.
 
 
 ### libivas_sensor.so
+
 
 ```json
 {
