@@ -95,11 +95,16 @@ ttps://www.hackster.io/378085/adaptive-deep-learning-hardware-for-video-analytic
 
 ## To run the demo
 
-Demo Includes parts: 1) video pipelines, 2) host program for management and 3) hardware firmwares. The details of the design is in the following sections. This section inlcudes the guide to start the demo.
+There are a number of parts in our demo: 1) gstreamer video processing pipes, 2) host program for management and 3) hardware firmwares. Please follow the instructions blow to to run the demo.
+
+### Set up the environment
 
 0. Follow the [official instructions](https://xilinx.github.io/kria-apps-docs/main/build/html/index.html) to set up KV260 (smart camera and AIBox-ReID are needed).
 
-1. Download VVAS libs to kv260 (/opt/xilinx/lib/):
+
+### Gstreamer video processing pipes
+
+1. Download our customized VVAS libs to kv260 (/opt/xilinx/lib/):
     - dpuinfer for AI inference to support new model and switch: [libivas_xdpuinfer.so](./vvas_so_lib/libivas_xdpuinfer.so)
     - Crop for Openopse: [libivas_crop_openopse.so](./vvas_so_lib/libivas_crop_openopse.so)
     - To support Openopse: [libivas_openpose.so](./vvas_so_lib/libivas_openpose2.so)
@@ -111,7 +116,6 @@ Demo Includes parts: 1) video pipelines, 2) host program for management and 3) h
     - Draw box/roadline: [libivas_xboundingbox.so](./vvas_so_lib/libivas_xboundingbox.so)
 
 2. **IMPORTANT**: Update gstreamer plugin lib to support multiple inference channel (/usr/lib/).   
-    
     - [libgstivasinpinfermeta-1.0.so.0](./gst_update/libgstivasinpinfermeta-1.0.so.0)
     - [libgstivasinpinfermeta-1.0.so.0.1602.0](./gst_update/libgstivasinpinfermeta-1.0.so.0.1602.0)
 
@@ -121,13 +125,11 @@ Demo Includes parts: 1) video pipelines, 2) host program for management and 3) h
 
 
 3. Download [new json file for VVAS configuration](./json_configuration/ivas.zip) and extract to kv260 (/opt/xilinx/share)  
-    **Note**: Please find the separate section for configuration description. 
+    **Note**: Please find the appendix section for description of configuration. 
 
-4. Download [scripts to start video pipeline](./shell-scripts/gst_reid_4k.sh) to /home/scripts/.
-    
-    Now you should be able to run the video pipeline. 
-
-    The shell scripts can take input parameter for different requirements:
+4. Now, you should be ready run the video pipeline. Download [scripts to start video pipeline](./shell-scripts/gst_reid_4k.sh) to /home/scripts/.
+   
+   The provided shell scripts can take input parameters for the configuration of video processing :
 
 
         Help:
@@ -140,6 +142,7 @@ Demo Includes parts: 1) video pipelines, 2) host program for management and 3) h
 
         sudo ./scripts/gst_reid_4k2.sh -f <video> -r <AI program>
 
+### Set up and run host program
 
 5. Download [Host program](./host_program/video-management-%20example.ipynb) to kv260. Use jupyter to run it.
     
@@ -158,6 +161,7 @@ Demo Includes parts: 1) video pipelines, 2) host program for management and 3) h
     modelctr = kv260adpModelCtr("/home/petalinux/.temp/dpu_seg_rx")
     modelctr.setNewModel("ENet_cityscapes_pt","SEGMENTATION","/opt/xilinx/share/vitis_ai_library/models/B3136/")
     ```
+### Switch of Hardware design
 
 6. (Optional) load the hardware with the B4096 DPU: 
 
@@ -166,9 +170,9 @@ Demo Includes parts: 1) video pipelines, 2) host program for management and 3) h
 
 
 
-## Video pipelines in the demo:
-###  Architecture of the video pipeline and management branch:
-The management branch is responible for checking the scenerio of input videos. The structure of video pipeline is (1080P mode) as follow:
+## Gstreamer video processing pipes in the demo
+###  Architecture of the video processing pipes:
+ The structure of video processing pipes is as follow. In our demo, there are two kinds of branches: 1) management branch and 2) main AI inference branch.
 
 ![architecture of the video pipeline ](./media/figures/pipelinestructure.svg)  
 (Figure: video pipeline in 1080P mode.)
@@ -183,13 +187,14 @@ The management branch is responible for checking the scenerio of input videos. T
 **In the 4K mode, there is a separate branch (1090p) to draw waveform and UI.**
 
 
+### management branch:
 
-As shown in the figures, the management branch runs as a asistant branch with the main task branch. Using a copyed stream from main branch, the management branch can check the input scenarios. 
+The management branch is responible for checking the scenerio of input videos. As shown in the figures, the management branch runs as a asistant branch with the main AI inference branch.  This branch takes of a copyed video stream from main AI inference branch, so that it can monitor the video stream simultaneously.
 
-
-Considering that the scenairos will not change frequenctly, the inference runs every few seconds. The inference interval can be adjusted by pre-designed interfaces.
+***Note***: considering performance costs, the AI inference in management branch runs on seconds basis. The inference interval can be adjusted by pre-designed interfaces in real time.
     
-In our demo, we included two kinds of model for scenerio classification: 
+In our demo, we include two kinds of models for scenerio classification:
+
 1. For segmentation 
     There are two models from ***Model Zoo*** are used in our demo to satisfy different requirments of the accuracy:        
     - pt_ENet_cityscapes_512_1024_8.6G_2.0
@@ -202,7 +207,7 @@ In our demo, we included two kinds of model for scenerio classification:
     Lane detection are very useful to detect the region of interest. We use the model for the model zoo:
     - cf_VPGnet_caltechlane_480_640_0.99_2.5G_2.0
         
-        *Note*: current VVAS on KV260 does not support Lane detection officially. we use custom pulgins to support Lane detection.
+    *Note*: current VVAS on KV260 does not support Lane detection officially. we use custom pulgins to support Lane detection.
 
 
 ### Main task branches:
