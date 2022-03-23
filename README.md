@@ -49,11 +49,11 @@ This video show the performnace changes with above adpative optimization methods
 
 
 ### Hardwre switch
-For different cases, we deployed different hardware configuration for switch.  
+For different cases, we deployed different hardware configuration for switching.  
 <!-- ![Firmware list](./media/figures/firmwares.png) -->
 The bigger DPU (larger size or higher frequency) consumes more power even if there is no AI inference tasks. Hence, using smaller DPU in low workloads can lower the power consumption.
 
-Currently, we delpoyed two sizes of DPUs: 1) B3136 and 2) B4096. The hardwre configuration are packaged into the different firmwares. 
+Currently, we use two different sizes of DPU: 1) B3136 and 2) B4096. The hardwre configuration are packaged into the different firmwares. 
 
 DPU size :B3136  
 <img src="./media/figures/firmware-reid.png" width="400">
@@ -61,7 +61,7 @@ DPU size :B3136
 
 
 
-DPU size :B4096  
+DPU size :B4096  Firmware name: cmpk4096  https://github.com/luyufan498/Adaptive-Computing-Challenge-2021/tree/main/firmware   
 <img src="./media/figures/firmware-cmpk4096.png" width="400">
 <!-- ![Hardware configuration B4096](./media/figures/firmware-cmpk4096.png)   -->
 
