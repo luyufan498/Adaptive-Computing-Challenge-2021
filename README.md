@@ -219,51 +219,37 @@ The main AI inference branches are responible to operate AI models for correspon
 the structures of the video pipeline are shown in the figure. Considering the different requirements of applications, the video procesing pipe can run one stage or two stage AI inference. 'Video Pipe (a)' represents a typical one stage AI application (e.g. object detection and segmentation), where there is only one AI model to conduct the inference once per frame. 'Video Pipe (b)' represents a two-stage AI application (e.g. tracking, REID and car plates detection), where there are two AI models ruining simultaneously and the second one may run multiple times due the detection results from the first one.
 
 #### Branch for people scenarios:
-In people scenarios, the demo can run three kinds of task: 1) people detection, 2) REID and 3) openopse, and there are three kinds of models are used in the demo.
-1. refinedet. It is from the kv260 REID example.
-2. PesionID. It is from the Kv260 REID example.
-3. Openpose. 
-    - cf_SPnet_aichallenger_224_128_0.54G_2.0
+In people scenarios, the demo can run three kinds of tasks: 1) people detection, 2) ReID and 3) opse detection. 
+1. people detection: refinedet. It is from the kv260 ReID example. 
+2. ReID: refinedet + crop +personid + tracking. It is from the Kv260 ReID example. 
+3. opse detection: refinedet + crop + spnet.
+    ***Note***: we use cf_SPnet_aichallenger_224_128_0.54G_2.0 from Xilinx ***Model Zoo***.
 
 
 #### Branch for car scenarios:
 In the car scenarios, the demo can run two task: 1) object detection and 2) car track.
     
 1. yolo 
-    The object detection model we used here is Yolo from Model Zoo. 
+    The object detection models we used are from ***Model Zoo***. We integrate 4 sizes of yolo models in our demo, so that we can dynamically switch it according the video processing speed.  
     -	dk_yolov2_voc_448_448_34G_2.0
     -   dk_yolov2_voc_448_448_0.66_11.56G_2.0
     - 	dk_yolov2_voc_448_448_0.71_9.86G_2.0
     - 	dk_yolov2_voc_448_448_0.77_7.82G_2.0
 
-    *Note*: In the demo, there are 4 different sizes for realtime swith and performance adjustment. 
-
 2. CarID
-    We traned our own model for carid.
-    ********
-    - RN18_08 is the smallest model in our demo. 08 means 80% of the weights was pruned   [B3136](./models/models/B3136/carid/RN18_08/RN18_08.xmodel)
+    We trained and pruned 4 different size of carid model for model switch.
+    - RN18_08 [B3136](./models/models/B3136/carid/RN18_08/RN18_08.xmodel)
     - RN18_06 [B3136](./models/models/B3136/carid/RN18_06/RN18_06.xmodel)
     - RN18_04 [B3136](./models/models/B3136/carid/RN18_04/RN18_04.xmodel)
     - RN18_02 [B3136](./models/models/B3136/carid/RN18_02/RN18_02.xmodel)
 
+    ***Note***: RN18_\<xx\> means the percentage of the pruned weights. For example, RN18_08 means 80% of the weights was pruned, so it is the smallest one here.  
+
 3. OFA (Test)
-
-
-2) people branch
-    refinedet  (model zoo & offically supported)
-    personID   (from REID)
-    openpose  (model zoo & self made)
-
-3) car/traffic branch
-    yolo voc2 ()(model zoo & offically supported)
-    carID (5 different sizes) (self made & offically supported)  
-
 
 
 
 ## The plugin to get and draw realtime data on frames
-
-
 
 ![sensor](./media/gifs/chart.gif)
 
@@ -287,10 +273,6 @@ In our demo, we designed a dedicated plugin lib (libivas_xdpuinfer.so) to get da
     
     Due CPU costs of Draw, we also provde a number of paramenters for optimization. It is supproted to disable the title, data and overlay. There is also a optimization option for this lib, so that you can draw half of pixels only on UV planes to lower the costs. In the best case, filled mode costs 150 us, while the line mode costs 50 us.  
    
-
-
-
-
 
 
 ## Host program
