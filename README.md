@@ -172,24 +172,24 @@ There are a number of parts in our demo: 1) gstreamer video processing pipes, 2)
 
 ## Gstreamer video processing pipes in the demo
 ###  Architecture of the video processing pipes:
- The structure of video processing pipes is as follow. In our demo, there are two kinds of branches: 1) management branch and 2) main AI inference branch.
+ The structure of video processing pipes is as follow. In our demo, there are two types of branches: 1) management branch and 2) main AI inference branch.
 
 ![architecture of the video pipeline ](./media/figures/pipelinestructure.svg)  
 (Figure: video pipeline in 1080P mode.)
 
-**In the 1080P mode, the inference information from different branch needs to be drawn on the same frame. However the original Meta Affixer plugin does not support conbination of inference results from different branches. it returns error, when there are muliple inference results. We modified the gstreamer plugin (libgstivasinpinfermeta) to support this feature. Now, the info in the master sink port will be kept, while others will be dropped.**
+**In the 1080P mode, the inference information from different branch needs to be drawn on the same frame. However the original Meta Affixer plugin does not support conbination of inference results from different branches. it returns error, when there are muliple inference results. We modified the gstreamer plugin (libgstivasinpinfermeta) to support this feature. Now, the info from the master sink port will be kept, while others will be dropped.**
 
 
 ![architecture of the video pipeline 4k ](./media/figures/pipelinestructure4k.svg)  
 
 (Figure: video pipeline in 4K mode.)
 
-**In the 4K mode, there is a separate branch (1090p) to draw waveform and UI.**
+**In the 4K mode, there is a separate branch (1080p) to draw waveform and UI.**
 
 
 ### management branch:
 
-The management branch is responible for checking the scenerio of input videos. As shown in the figures, the management branch runs as a asistant branch with the main AI inference branch.  This branch takes of a copyed video stream from main AI inference branch, so that it can monitor the video stream simultaneously.
+The management branch is responible for checking the scenerio of input videos. As shown in the figures, the management branch runs as a asistant branch with the main AI inference branch.  This branch takes a copyed video stream from main AI inference branch as input, so that it can monitor the video stream simultaneously.
 
 ***Note***: considering performance costs, the AI inference in management branch runs on seconds basis. The inference interval can be adjusted by pre-designed interfaces in real time.
     
@@ -210,13 +210,13 @@ In our demo, we include two kinds of models for scenerio classification:
     *Note*: current VVAS on KV260 does not support Lane detection officially. we use custom pulgins to support Lane detection.
 
 
-### Main task branches:
-The main video pipelines are responible for operating AI models for corresponding scenors. In our demo, we implemented two typical scenarios in smart city system: 1) people and 2) car scenarios. In each scenario, we also intregarte a number of video pipelines for dynamical switch. 
+### Main AI inference branches:
+The main AI inference branches are responible to operate AI models for corresponding scenairos. In our demo, we include two typical scenarios for smart city system: 1) people scenario and 2) car scenario. Videos from different sceniaros will be proccessed by corresponding branches. If the scenario is not detected, the corresponding branch will also be disabled.
 
 ![Video pipeline](./media/figures/pipelines.svg)  
 (Figure: Pipeline of the management branch)
 
-the structures of the video pipeline are shown in the figure. Considering the different applications, the video pipeline can run one stage or two stage AI inference. 'Pipeline (a)' represents a typical one stage AI application (e.g. object detection and segmentation), where there is only one AI model to conduct the inference once per frame. 'Pipeline (b)' represents a two-stage AI application (e.g. tracking, REID and car plates detection), where there are two AI models ruining simultaneously and the second one may run multiple times due the detection results from the first one.
+the structures of the video pipeline are shown in the figure. Considering the different requirements of applications, the video procesing pipe can run one stage or two stage AI inference. 'Video Pipe (a)' represents a typical one stage AI application (e.g. object detection and segmentation), where there is only one AI model to conduct the inference once per frame. 'Video Pipe (b)' represents a two-stage AI application (e.g. tracking, REID and car plates detection), where there are two AI models ruining simultaneously and the second one may run multiple times due the detection results from the first one.
 
 #### Branch for people scenarios:
 In people scenarios, the demo can run three kinds of task: 1) people detection, 2) REID and 3) openopse, and there are three kinds of models are used in the demo.
