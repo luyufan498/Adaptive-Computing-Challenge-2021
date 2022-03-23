@@ -325,15 +325,26 @@ In our demo, there are three kinds of  Inter-process communication (IPC) to tran
 ### Tranning CarID
 ### OFA model
 
+Once-for-all network (OFA) is also used to generate different sizes of models. 
+
+In the demo, we use OFA trained network as a super network as well as searching algorithm, to generate multiple subnetworks according to our requirements. We firstly use latency as an input parameter in the search algorithm. 
+
+![](./media/figures/ofa_opt.svg)
+
+The figure describes the model generation technique, where Model is optimised in terms of latency and accuracy. In OFA framework, random search is firstly used to determine a set of subnetworks (Subnet N) those are close to the defined latency and  evolutionary search is then used to find out the subnetworks (Subnet K) with highest accuracy among the previously selected set of subnetworks.
 
 
-# Appendix
 
-## Configuration of the Json file for pugin libs
+
+
+
+## Appendix
+
+### Configuration of the Json file for pugin libs
 Here we only list the most import libs, please see [json example](./json_configuration/) for other libs. 
 
 
-### libivas_xdpuinfer.so
+#### libivas_xdpuinfer.so
 
 ```json
 {
@@ -375,9 +386,7 @@ libivas_xdpuinfer.so is modified from VVAS example. Hence we only add explainati
 
 
 
-### libivas_xdpuinfer.so
-
-
+#### libivas_xdpuinfer.so
 
 ```json
 {
@@ -484,7 +493,7 @@ libivas_xdpuinfer.so is modified from VVAS example. Hence we only add explainati
 
 
 
-### libivas_runindicater.so
+#### libivas_runindicater.so
 
 It is just a UI plugin to indicate if the branch is running.
 
@@ -520,7 +529,7 @@ It is just a UI plugin to indicate if the branch is running.
 | ffc_rxpath | string | Send data to   plugins   |
 
 
-### libivas_sensor.so
+#### libivas_sensor.so
 
 
 ```json
