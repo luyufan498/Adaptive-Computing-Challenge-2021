@@ -1,6 +1,10 @@
 # xilinx adaptive challenge
 
 
+
+
+
+
 ## Introducion
 
 
@@ -10,7 +14,7 @@
 
 ### Branch switch for different scenarios
 
-![Scenario switch](./media/gifs/scenarioswitch.gif)  
+![Scenario switch](./media/gifs/scenarioswitch.gif)
 
 This video shows the switch of AI processing branches for different scenarios. According to the detected scenarios, the corressponding AI inference will be enabled or disabled.
 - Branch 0 (left top): for scenairo classification.
@@ -51,16 +55,23 @@ The bigger DPU (larger size or higher frequency) consumes more power even if the
 
 Currently, we delpoyed two sizes of DPUs: 1) B3136 and 2) B4096. The hardwre configuration are packaged into the different firmwares. 
 
-![Hardware configuration B3136](./media/figures/firmware-reid.png)  
-DPU size :B3136
+DPU size :B3136  
+<img src="./media/figures/firmware-reid.png" width="400">
+<!-- ![Hardware configuration B3136](./media/figures/firmware-reid.png)   -->
 
-![Hardware configuration B4096](./media/figures/firmware-cmpk4096.png)  
-DPU size :B4096
+
+
+DPU size :B4096  
+<img src="./media/figures/firmware-cmpk4096.png" width="400">
+<!-- ![Hardware configuration B4096](./media/figures/firmware-cmpk4096.png)   -->
 
 About the details of different hardware configuration and performance adjustment please see our previous project： h
 ttps://www.hackster.io/378085/adaptive-deep-learning-hardware-for-video-analytics-f8d064
 
-![Hardware switch](https://github.com/luyufan498/Adaptive-deep-learning-hardware/raw/main/pic/system.png)
+
+<img src="https://github.com/luyufan498/Adaptive-deep-learning-hardware/raw/main/pic/system.png" width="400">
+
+
 
 
 <!-- ## Adaptive
