@@ -12,9 +12,8 @@
 
 ![Scenario switch](./media/gifs/scenarioswitch.gif)  
 
-
-Using crocessponding AI branch for different scenairos.
-- Branch 0 (left top): for scenairo detection.
+This video shows the switch of AI processing branches for different scenarios. According to the detected scenarios, the corressponding AI inference will be enabled or disabled.
+- Branch 0 (left top): for scenairo classification.
 - Branch 1 (left bottom): enable in people scenairos.
 - Branch 2 (right bottom): enable in car scenairos.
 
@@ -22,29 +21,24 @@ Using crocessponding AI branch for different scenairos.
 
 ![Inferece interval](./media/gifs/Inferenceinterval.gif)  
 
-
 https://youtu.be/EY3WWD4jYp4  
-Realtime adjustment of inference interval in Jupyter.
+This shows the realtime adjustment of inference interval in Jupyter.
 
-### Model size
-
+### Model size and type
 ![Model size](./media/gifs/adjustmodelsize.gif)  
 
-
 https://youtu.be/rI5IlkQ1GYE  
-Running applications tracking for cars: Yolo + CarID   
-Realtime adjustment of Model size. There are 4 different model size of CarID.  
-The fps increases when using smaller model. 
+Running applications tracking for cars: Yolo + CarID + tracking
+This video shows the realtime adjustment of model size in Jupyter. There are 4 different model sizes of CarID for different workloads.  This video shows the case that fps increases with smaller model. 
 
+It is also supported to change AI model types for different functionalities.    
+***Note***: Due to the resolution problems in preprocess plugins, it requires CPU for preprocessing.
 
 ### Adaptive optimization
-
-
 ![Adaptive optimization](./media/gifs/KV260-optimzation.gif)  
 
-
 https://youtu.be/lOm2LP5qe-M  
-This video show the performnace changes after using adpative optimization. 
+This video show the performnace changes with above adpative optimization methods. 
 - Branch 0 (Segmentation):  the inference interval increases (1->5) for less performace cost. 
 - Branch 1 (Refindet&Openpose): the inferece is disabled, because there is no person.
 - Branch 2 (Yolo): the size of the model decreases and the inference intrerval increases (1->2)  
