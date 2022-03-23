@@ -298,7 +298,6 @@ class kv260adpModelCtr(object):
     def setIndicaterUI(self,on,write_path = ""):
     def getFPSfromFile(self, file):
     def getSegmentationResult(self,file):
-
 ```
 
 
@@ -320,9 +319,13 @@ In our demo, there are three kinds of  Inter-process communication (IPC) to tran
 
 
 
-## Generate Models
-### Use Models from Model Zoo
+## Generate Models 
+
+Model Zoo has provided a lot of models, which are easy to use. Howver, most of those models are not available in other sizes. Hence, we used two method in our demo to generate different size of models: 1) pruning and 2) OFA.
+
 ### Tranning CarID
+
+
 ### OFA model
 
 Once-for-all network (OFA) is also used to generate different sizes of models. 
@@ -332,10 +335,6 @@ In the demo, we use OFA trained network as a super network as well as searching 
 ![](./media/figures/ofa_opt.svg)
 
 The figure describes the model generation technique, where Model is optimised in terms of latency and accuracy. In OFA framework, random search is firstly used to determine a set of subnetworks (Subnet N) those are close to the defined latency and  evolutionary search is then used to find out the subnetworks (Subnet K) with highest accuracy among the previously selected set of subnetworks.
-
-
-
-
 
 
 ## Appendix
@@ -612,7 +611,6 @@ It is just a UI plugin to indicate if the branch is running.
 | max_sample_points | int | |
 | max_display_value | float | |
 | min_display_value | float | |
-
 
 
 
