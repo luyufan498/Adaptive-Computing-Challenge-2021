@@ -479,18 +479,18 @@ libivas_xdpuinfer.so is modified from VVAS example. Hence we only add explainati
 
 | Key        | value             | description | 
 | ---------- | ----------------- | ----------- | 
-| ffc_txpath | path of fifo file | Send data from plugins   |    
-| ffc_rxpath | path of fifo file | Send data to   plugins   |
+| ffc_txpath | string | Send data from plugins   |    
+| ffc_rxpath | string | Send data to   plugins   |
 | enable_info_overlay | true / false   | draw string or not |
 | info_x_offset | int | relative offset of the string    |
 | info_y_offset | int | relative offset of the string    |
-| enable_frame_overlay | true / false  | draw segmentation result or not |
+| enable_frame_overlay | bool  | draw segmentation result or not |
 | y_offset_abs | int  |  absolute offset of the segmentation overlay |
 | x_offset_abs | int  |  absolute offset of the segmentation overlay |
 | overlay_width | int  | width of the segmentation overlay |
 | overlay_height | int  |  height of the segmentation overlay |
 | write_file_path | path  | path of output file (only the classification result) |
-| enable_w2f | true/false | enable output file or not|
+| enable_w2f | bool | enable output file or not|
 | classes |  | the pixel color of the segmentation overlay. If you leave it empty, nothing will be drawn |
 
 
@@ -530,7 +530,7 @@ It is just a UI plugin to indicate if the branch is running.
 | x_pos | | |
 | y_pos | | |
 | width | | diameter or width |
-| ffc_rxpath | path of fifo file | Send data to   plugins   |
+| ffc_rxpath | string | Send data to   plugins   |
 
 
 ### libivas_sensor.so
@@ -598,10 +598,10 @@ It is just a UI plugin to indicate if the branch is running.
 | enable_fps | bool | This plugin can also report fps of the current branch |
 | fps_window_len | int  | Number of point for calculating the average fps  |
 | enable_fifocom | bool | Use named pipe to report fps |
-| ffc_tx |  | File path of the pipe |
+| ffc_tx | string | File path of the pipe |
 | | | |
 | enable_info_overlay | bool | Draw tile on frames|
-| title | | Title of the chart
+| title | string | Title of the chart
 | | |  |
 | enable_chart_overlay | bool | Draw chart or not|
 | enable_analysis_overlay| bool | Draw realtime data|
