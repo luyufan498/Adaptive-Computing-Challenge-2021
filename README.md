@@ -5,7 +5,7 @@
 
 
 
-## Introducion
+## Introduction
 
 
 
@@ -16,10 +16,10 @@
 
 ![Scenario switch](./media/gifs/scenarioswitch.gif)
 
-This video shows the switch of AI processing branches for different scenarios. According to the detected scenarios, the corressponding AI inference will be enabled or disabled.
-- Branch 0 (left top): for scenairo classification.
-- Branch 1 (left bottom): enable in people scenairos.
-- Branch 2 (right bottom): enable in car scenairos.
+This video shows the switch of AI processing branches for different scenarios. According to the detected scenarios, the corresponding AI inference will be enabled or disabled.
+- Branch 0 (left top): for scenario classification.
+- Branch 1 (left bottom): enable in people scenarios.
+- Branch 2 (right bottom): enable in car scenarios.
 
 ###  Inference interval
 
@@ -42,7 +42,7 @@ It is also supported to change AI model types for different functionalities.
 ![Adaptive optimization](./media/gifs/KV260-optimzation.gif)  
 
 https://youtu.be/lOm2LP5qe-M  
-This video show the performnace changes with above adpative optimization methods. 
+This video show the performnace changes with above adaptive optimization methods. 
 - Branch 0 (Segmentation):  the inference interval increases (1->5) for less performace cost. 
 - Branch 1 (Refindet&Openpose): the inferece is disabled, because there is no person.
 - Branch 2 (Yolo): the size of the model decreases and the inference intrerval increases (1->2)  
@@ -50,7 +50,7 @@ This video show the performnace changes with above adpative optimization methods
 
 <!-- ###  UI overlay for one channel and four channels
 
-For one channel and four channels, we privodes two kinds of UI overlay for it. 
+For one channel and four channels, we provides two kinds of UI overlay for it. 
 
 ![](./media/gifs/1080p-carid1.gif)
 
