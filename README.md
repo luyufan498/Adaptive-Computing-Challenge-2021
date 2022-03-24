@@ -48,6 +48,24 @@ This video show the performnace changes with above adpative optimization methods
 - Branch 2 (Yolo): the size of the model decreases and the inference intrerval increases (1->2)  
 
 
+<!-- ###  UI overlay for one channel and four channels
+
+For one channel and four channels, we privodes two kinds of UI overlay for it. 
+
+![](./media/gifs/1080p-carid1.gif)
+
+In the one channel mode, everything will be draw on the same 1080P output. As shown in the video, the segmentation result from management branch and data waveform are put on the top right corner of frames. Users can 
+
+![](./media/gifs/4k_reid_yolo.gif)
+
+
+In the four channels mode, the output is 4K resolution. The results drawn on 4 1080P videos streams. As shown in the video, the segmentation results from management branch is put on the top left corner, while the data waveforms are put on the top right.  The results from branch 1 and 2 are put on the bottom. -->
+
+
+
+
+
+
 ### Hardwre switch
 For different cases, we deployed different hardware configuration for switching.  
 <!-- ![Firmware list](./media/figures/firmwares.png) -->
@@ -174,17 +192,28 @@ There are a number of parts in our demo: 1) gstreamer video processing pipes, 2)
 ###  Architecture of the video processing pipes:
  The structure of video processing pipes is as follow. In our demo, there are two types of branches: 1) management branch and 2) main AI inference branch.
 
-![architecture of the video pipeline ](./media/figures/pipelinestructure.svg)  
+![architecture of the video pipeline ](./media/figures/pipelinestructure.svg)   
 (Figure: video pipeline in 1080P mode.)
+
+![](./media/gifs/1080p-carid1.gif)
+
+In the one channel (1080P) mode, everything will be draw on the same 1080P output. As shown in the video, the segmentation result from management branch and data waveform are put on the top right corner of frames. Users can 
+
 
 **In the 1080P mode, the inference information from different branch needs to be drawn on the same frame. However the original Meta Affixer plugin does not support conbination of inference results from different branches. it returns error, when there are muliple inference results. We modified the gstreamer plugin (libgstivasinpinfermeta) to support this feature. Now, the info from the master sink port will be kept, while others will be dropped.**
 
 
-![architecture of the video pipeline 4k ](./media/figures/pipelinestructure4k.svg)  
-
+![architecture of the video pipeline 4k ](./media/figures/pipelinestructure4k.svg)    
 (Figure: video pipeline in 4K mode.)
 
 **In the 4K mode, there is a separate branch (1080p) to draw waveform and UI.**
+
+![](./media/gifs/4k_reid_yolo.gif)
+
+
+In the four channels (4k) mode, the output is 4K resolution. The results drawn on 4 1080P videos streams. As shown in the video, the segmentation results from management branch is put on the top left corner, while the data waveforms are put on the top right.  The results from branch 1 and 2 are put on the bottom.
+
+
 
 
 ### management branch:
