@@ -1,12 +1,14 @@
 # Xilinx Adaptive Challenge 2021
 
-
+----->Logo here<------
 
 
 
 
 ## Introduction
+Deep neural networks (DNNs) is the key technique in modern artificial intelligence (AI) that has provided state-of-the-art accuracy on many applications, and due to this, they have received significant interest. The ubiquity of smart devices and autonomous robot systems are placing heavy demands on DNNs-inference hardware with high energy and computing efficiencies along with rapid development of AI techniques. The high energy efficiency, computing capabilities and reconfigurability of FPGA make it a promising platform for hardware acceleration of such computing tasks. 
 
+In this challenge, we have designed a flexible video processing framework on a KV260 SoM, which can be used in a smart camera for intelligent transportation system (ITS) application. Our framework is not only capable to automatically detect application scenarios (e.g. Car or Pedestrian) using a semantic segmentation network, and it is also able to automatically select best of the DNN models for the application scenarios. Thanks for the dynamic reconfiguration and rum-time management APIs, our system is able to dymanicly switching the DNN inference model at run-time without stop the video pipeline. This finally allows our smart camera system to be **truly adaptive**, and achieve the best performance in a **smarter way**.
 
 
 ## Demo videos
@@ -23,7 +25,7 @@ This video shows the switch of AI processing branches for different scenarios. A
 
 ###  Inference interval
 
-![Inferece interval](./media/gifs/Inferenceinterval.gif)  
+![Inference interval](./media/gifs/Inferenceinterval.gif)  
 
 https://youtu.be/EY3WWD4jYp4  
 This shows the realtime adjustment of inference interval in Jupyter.
@@ -33,7 +35,7 @@ This shows the realtime adjustment of inference interval in Jupyter.
 
 https://youtu.be/rI5IlkQ1GYE  
 Running applications tracking for cars: Yolo + CarID + tracking
-This video shows the realtime adjustment of model size in Jupyter. There are 4 different model sizes of CarID for different workloads.  This video shows the case that fps increases with smaller model. 
+This video shows the real-time adjustment of model size in Jupyter. There are 4 different model sizes of CarID for different workloads.  This video shows the case that fps increases with smaller model. 
 
 It is also supported to change AI model types for different functionalities.    
 ***Note***: Due to the resolution problems in preprocess plugins, it requires CPU for preprocessing.
