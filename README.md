@@ -364,13 +364,17 @@ Model Zoo has provided a lot of models, which are easy to use. However, most of 
 
 ### Training CarID
 
-The CarID was trained using [reid_baseline_with_syncbn framework: ](https://github.com/DTennant/reid_baseline_with_syncbn), please follow the installation and configuration instructions from the Github page.
+The CarID was trained using [reid_baseline_with_syncbn framework: ](https://github.com/DTennant/reid_baseline_with_syncbn), please follow their installation and configuration instructions on the Github page.
 
-The training dataset used for our model is:  [VRIC: Vehicle Re-Identificaton in Context](https://qmul-vric.github.io/)
+The CarID model was trained using: [VRIC: Vehicle Re-Identificaton in Context](https://qmul-vric.github.io/)
 
 ![VRIC dataset](./media/figures/veri_examples.png)
 
-### OFA model
+### Pruning CarID model
+
+
+
+### Once-for-all network (OFA)
 
 Once-for-all network (OFA) is also used to generate different sizes of models. 
 
@@ -420,7 +424,7 @@ libivas_xdpuinfer.so is modified from VVAS example. Hence we only add explainati
 | Key        | value             | description | 
 | ---------- | ----------------- | ----------- | 
 | ffc_txpath | path of fifo file | Send data from plugins   |    
-| ffc_rxpath | path of fifo file | Send data to   plugins   |
+| ffc_rxpath | path of fifo file | Send data to plugins   |
 | model-class |                 | Two new added class: SEGMENTATION and ROADLINE |
 | interval_frames | number of frames   | start interval, it can be set by the command in runtime|
 | buff_en | true/false | buffer the inference result of not during the Ai inference interval. Not suitable for segmentation, because it has been included in libivas_postsegmentation.so |
