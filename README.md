@@ -52,10 +52,10 @@ It is also supported to change AI model types for different functionalities.
 ![Adaptive optimization](./media/gifs/KV260-optimzation.gif)  
 
 https://youtu.be/lOm2LP5qe-M  
-This video show the performnace changes with above adaptive optimization methods. 
-- Branch 0 (Segmentation):  the inference interval increases (1->5) for less performace cost. 
-- Branch 1 (Refindet&Openpose): the inferece is disabled, because there is no person.
-- Branch 2 (Yolo): the size of the model decreases and the inference intrerval increases (1->2)  
+This video show the performance changes with above adaptive optimization methods. 
+- Branch 0 (Segmentation): the inference interval increases (1->5) for less performance cost. 
+- Branch 1 (Refindet & Openpose): the inference is disabled, because there is no person.
+- Branch 2 (Yolo): the size of the model decreases and the inference interval increases (1->2)  
 
 
 <!-- ###  UI overlay for one channel and four channels
