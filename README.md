@@ -1,4 +1,4 @@
-# Xilinx Adaptive Challenge 2021
+# Xilinx Adaptive Computing Challenge 2021
 
 ----->Logo here<------
 
