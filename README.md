@@ -220,10 +220,10 @@ In the one channel (1080P) mode, everything will be drawn on the same 1080P outp
 **In the 1080P mode, the inference information from different branch needs to be drawn on the same frame. However, the original Meta Affixer plugin does not support combination of inference results from different branches. It returns error, when there are multiple inference results. We modified the gstreamer plugin (libgstivasinpinfermeta) to support this feature. Now, the info from the master sink port will be kept, while others will be dropped.**
 
 
-![Architecture of the video pipeline 4k ](./media/figures/pipelinestructure4k.svg)    
+![Architecture of the video pipeline 4k](./media/figures/pipelinestructure4k.svg)    
 (Figure: video pipeline in 4K mode.)
 
-**In the 4K mode, there is a separate branch (1080p) to draw waveform and UI.**
+**In the 4K mode, there is a separate branch (1080p) to draw waveforms and GUI.**
 
 ![](./media/gifs/4k_reid_yolo.gif)
 
