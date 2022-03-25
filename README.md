@@ -1,8 +1,6 @@
 # Xilinx Adaptive Computing Challenge 2021
 
------>Logo here<------
-
-
+![LOGO](./media/gifs/LOGO_GIF.gif)
 
 
 ## Introduction
