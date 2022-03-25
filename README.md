@@ -6,15 +6,25 @@
 
 
 ## Introduction
+
 Deep neural networks (DNNs) is the key technique in modern artificial intelligence (AI) that has provided state-of-the-art accuracy on many applications, and due to this, they have received significant interest. The ubiquity of smart devices and autonomous robot systems are placing heavy demands on DNNs-inference hardware with high energy and computing efficiencies along with rapid development of AI techniques. The high energy efficiency, computing capabilities and reconfigurability of FPGA make it a promising platform for hardware acceleration of such computing tasks. 
 
-In this challenge, we have designed a flexible video processing framework on a KV260 SoM, which can be used in a smart camera for intelligent transportation system (ITS) application. Our framework is not only capable to automatically detect application scenarios (e.g. Car or Pedestrian) using a semantic segmentation network, and it is also able to automatically select best of the DNN models for the application scenarios. Thanks for the dynamic reconfiguration and rum-time management APIs, our system is able to dymanicly switching the DNN inference model at run-time without stop the video pipeline. This finally allows our smart camera system to be ***truly adaptive***, and achieve the __best performance__ in a __smarter way__.
+In this challenge, we have designed a flexible video processing framework on a KV260 SoM, which can be used in a smart camera application for intelligent transportation system (ITS) in smart city. Our framework is not only capable to automatically detect application scenarios (e.g. Car or Pedestrian) using a semantic segmentation and road line detection network, and it is also able to automatically select the best of the DNN models for the application scenarios. Thanks for the dynamic reconfiguration and rum-time management APIs, our system is able to dymanicly switching the DNN inference model at run-time without stop the video pipeline. This finally allows our smart camera system to be truly adaptive, and achieve the best performance in a smarter way.
+
+### Key features/functions
+- Support application scenarios detection (e.g. Car, Pedestrian, and many more) using semantic segmentation and road line detection networks.
+- Extend the existing VVAS framework (v1.0) with supports of many more DNN models: semantic segmentation, lane detection, pose detection, OFA, and many more when using our flexible JSON interface.
+- Support dynamic model switching for both software and hardware video processing pipelines.
+- Support run-time performance monitoring with graphic interface on monitor (e.g. Power consumption, FPS, temperature, CPU/Memory, and many more system information).
+- Support switching DNN inference models dynamically (e.g. using models with different pruning factors) in the run-time without affecting the system performance.
+- Support mitigation to other Xilinx Ultrascale+ MPSoC platform
 
 ### Requirements
 - Vitis-AI 1.4.1
 - Vivado 2021.1
 - PetaLinux 2021.1
-- KV260
+- VVAS 1.0
+- KV260 or any compatible Xilinx Ultrascale+ MPSoC, e.g. ZCU104, Ultra96
 - HDMI monitor and cable
 - HD camera (Optional)
 
@@ -35,24 +45,24 @@ This video shows the switch of AI processing branches for different scenarios. A
 
 ![Inference interval](./media/gifs/Inferenceinterval.gif)  
 
-https://youtu.be/EY3WWD4jYp4  
+[See HD version in YouTube](https://youtu.be/EY3WWD4jYp4)  
 This shows the real-time adjustment of inference interval in Jupyter.
 
 ### Model size and type
 ![Model size](./media/gifs/adjustmodelsize.gif)  
 
-https://youtu.be/rI5IlkQ1GYE  
+[See HD version in YouTube](https://youtu.be/rI5IlkQ1GYE)  
 Running applications tracking for cars: Yolo + CarID + tracking
-This video shows the real-time adjustment of model size in Jupyter. There are 4 different model sizes of CarID for different workloads.  This video shows the case that fps increases with smaller model. 
+This video shows the real-time adjustment of model size in Jupyter. There are 4 different model sizes of CarID for different workloads.  This video shows the case that FPS increases significantly with smaller model. 
 
-It is also supported to change AI model types for different functionalities.    
-***Note***: Due to the resolution problems in preprocess plugins, it requires CPU for preprocessing.
+It is also supported to change types of AI model for different functionalities.    
+***Note***: Due to the resolution problems in preprocessing plugins in VVAS 1.0, it requires CPU for do preprocessing tasks.
 
 ### Adaptive optimization
 ![Adaptive optimization](./media/gifs/KV260-optimzation.gif)  
 
-https://youtu.be/lOm2LP5qe-M  
-This video show the performance changes with above adaptive optimization methods. 
+[See HD version in YouTube](https://youtu.be/lOm2LP5qe-M)  
+This video shows the performance changes with above adaptive optimization methods. 
 - Branch 0 (Segmentation): the inference interval increases (1->5) for less performance cost. 
 - Branch 1 (Refindet & Openpose): the inference is disabled, because there is no person.
 - Branch 2 (Yolo): the size of the model decreases and the inference interval increases (1->2)  
@@ -76,10 +86,10 @@ In the four channels mode, the output is 4K resolution. The results drawn on 4 1
 
 
 
-### Hardwre switch
-For different cases, we deployed different hardware configuration for switching.  
+### Dynamic Hardware switching
+For different cases, we deployed different hardware configurations for switching as well.  
 <!-- ![Firmware list](./media/figures/firmwares.png) -->
-The bigger DPU (larger size or higher frequency) consumes more power even if there is no AI inference tasks. Hence, using smaller DPU in low workloads can lower the power consumption.
+The bigger DPU (e.g. larger size or higher frequency) consumes more power even if there is no AI inference tasks. Hence, using smaller DPU in low workloads can lower the power consumption.
 
 Currently, we use two different sizes of DPU: 1) B3136 and 2) B4096. The hardware configuration is packaged into the different firmware. 
 
@@ -93,8 +103,7 @@ DPU size :B4096 Firmware name: cmpk4096 https://github.com/luyufan498/Adaptive-C
 <img src="./media/figures/firmware-cmpk4096.png" width="400">
 <!-- ![Hardware configuration B4096](./media/figures/firmware-cmpk4096.png)   -->
 
-About the details of different hardware configuration and performance adjustment please see our previous project： h
-ttps://www.hackster.io/378085/adaptive-deep-learning-hardware-for-video-analytics-f8d064
+About the details of different hardware configurations and performance adjustments please see our previous project: [Adaptive deep learning hardware for video analytics](https://www.hackster.io/378085/adaptive-deep-learning-hardware-for-video-analytics-f8d064).
 
 
 <img src="https://github.com/luyufan498/Adaptive-deep-learning-hardware/raw/main/pic/system.png" width="400">
@@ -121,11 +130,11 @@ ttps://www.hackster.io/378085/adaptive-deep-learning-hardware-for-video-analytic
 
 ## Use Model in the demo design -->
 
-## To run the demo
+## Detailed instructions to run the demo
 
-There are a number of parts in our demo: 1) gstreamer video processing pipes, 2) host program for management and 3) hardware firmware. Please follow the instructions blow to run the demo.
+There are a number of parts in our demo: 1) Gstreamer video processing pipes, 2) Host program for management and 3) Hardware firmware. Please follow the instructions to run the demo.
 
-### Set up the environment
+### Environment setup 
 
 0. Follow the [official instructions](https://xilinx.github.io/kria-apps-docs/main/build/html/index.html) to set up KV260 (smart camera and AIBox-ReID are needed).
 
@@ -142,6 +151,8 @@ There are a number of parts in our demo: 1) gstreamer video processing pipes, 2)
     - Draw segmentation: [libivas_performancestatus.so](./vvas_so_lib/libivas_performancestatus.so)
     - Draw pose: [libivas_drawpose.so](./vvas_so_lib/libivas_drawpose.so)
     - Draw box/roadline: [libivas_xboundingbox.so](./vvas_so_lib/libivas_xboundingbox.so)
+
+    __Note__: to create your own VVAS libs for your customized model, please follow VVAS Github: [VVAS_CMPK](./VVAS_CMPK).
 
 2. **IMPORTANT**: Update gstreamer plugin lib to support multiple inference channel (/usr/lib/).   
     - [libgstivasinpinfermeta-1.0.so.0](./gst_update/libgstivasinpinfermeta-1.0.so.0)
@@ -196,10 +207,8 @@ There are a number of parts in our demo: 1) gstreamer video processing pipes, 2)
         sudo xmutil unloadapp
         sudo xmutil loadapp cmpk4096
 
-
-
 ## Gstreamer video processing pipes in the demo
-###  Architecture of the video processing pipes:
+###  Architecture of the video processing pipeline:
  The structure of video processing pipes is as follows. In our demo, there are two types of branches: 1) management branch and 2) main AI inference branch.
 
 ![Architecture of the video pipeline ](./media/figures/pipelinestructure.svg)   
@@ -226,9 +235,9 @@ In the four channels (4k) mode, the output is 4K resolution. The results drawn o
 
 
 
-### management branch:
+### Management branch:
 
-The management branch is responsible for checking the scenario of input videos. As shown in the figures, the management branch runs as an assistant branch with the main AI inference branch.  This branch takes a copied video stream from main AI inference branch as input, so that it can monitor the video stream simultaneously.
+The management branch is responsible for checking the scenario of input videos. As shown in the figures, the management branch runs as an assistant branch with the main AI inference branch.  This branch takes a copied video stream from main AI inference branch as an input, so that it can monitor the video stream simultaneously.
 
 ***Note***: considering performance costs, the AI inference in management branch runs on seconds basis. The inference interval can be adjusted by pre-designed interfaces in real time.
     
@@ -240,7 +249,7 @@ In our demo, we include two kinds of models for scenario classification:
     - pt_SemanticFPN-resnet18_cityscapes_256_512_10G_2.0 
 
     *Note1*: The input size of "512*1024" decreases the performance significantly.  
-    *Note2*: current VVAS on KV260 does not support segmentation officially. We use custom plugins to support Segmentation.
+    *Note2*: current VVAS (v1.0) on KV260 does not support segmentation officially. We use custom plugins to support Segmentation.
 
 2. Lane detection:
     Lane detection are very useful to detect the region of interest. We use the model for the model zoo:
@@ -250,26 +259,26 @@ In our demo, we include two kinds of models for scenario classification:
 
 
 ### Main AI inference branches:
-The main AI inference branches are responsible to operate AI models for corresponding scenarios. In our demo, we include two typical scenarios for smart city system: 1) people scenario and 2) car scenario. Videos from different scenarios will be processed by corresponding branches. If the scenario is not detected, the corresponding branch will also be disabled.
+The main AI inference branches are responsible to operate AI models for corresponding scenarios. In our demo, we include two typical scenarios for smart city systems: 1) people scenario and 2) car scenario. Videos from different scenarios will be processed by the corresponding branch. If the scenario is not detected, the corresponding branch will also be disabled.
 
 ![Video pipeline](./media/figures/pipelines.svg)  
 (Figure: Pipeline of the management branch)
 
-The structures of the video pipeline are shown in the figure. Considering the different requirements of applications, the video processing pipe can run one stage or two stage AI inference. 'Video Pipe (a)' represents a typical one stage AI application (e.g. object detection and segmentation), where there is only one AI model to conduct the inference once per frame. 'Video Pipe (b)' represents a two-stage AI application (e.g. tracking, REID and car plates detection), where there are two AI models ruining simultaneously and the second one may run multiple times due the detection results from the first one.
+The structures of the video pipeline are shown in the figure. Considering the different requirements of applications, the video processing pipe can run one stage or two stage AI inference. 'Video Pipe (a)' represents a typical one stage AI application (e.g. object detection and segmentation), where there is only one AI model to conduct the inference once per frame. 'Video Pipe (b)' represents a two-stage AI application (e.g. tracking, ReID and car plates detection), where there are two AI models ruining simultaneously and the second one may run multiple times due the detection results from the first one.
 
-#### Branch for people scenarios:
-In people scenarios, the demo can run three kinds of tasks: 1) people detection, 2) ReID and 3) opse detection. 
-1. people detection: refinedet. It is from the kv260 ReID example. 
+#### Branch for people scenario:
+In people scenario, the demo can run three kinds of tasks: 1) People detection, 2) ReID and 3) Pose detection. 
+1. People detection: refinedet. It is from the kv260 ReID example. 
 2. ReID: refinedet + crop + personid + tracking. It is from the Kv260 ReID example. 
-3. opse detection: refinedet + crop + spnet.
-    ***Note***: we use cf_SPnet_aichallenger_224_128_0.54G_2.0 from Xilinx ***Model Zoo***.
+3. Pose detection: refinedet + crop + spnet.
+    ***Note***: we use cf_SPnet_aichallenger_224_128_0.54G_2.0 from Xilinx ***Model Zoo v1.4***.
 
 
 #### Branch for car scenarios:
 In the car scenarios, the demo can run two tasks: 1) object detection and 2) car track.
     
 1. Yolo 
-    The object detection models we used are from ***Model Zoo***. We integrate 4 sizes of yolo models in our demo, so that we can dynamically switch it according the video processing speed.  
+    The object detection models we used are from ***Model Zoo v1.4***. We integrate 4 sizes of Yolo models in our demo, so that we can dynamically switch it according the video processing speed.  
     -	dk_yolov2_voc_448_448_34G_2.0
     -   dk_yolov2_voc_448_448_0.66_11.56G_2.0
     - 	dk_yolov2_voc_448_448_0.71_9.86G_2.0
@@ -284,11 +293,17 @@ In the car scenarios, the demo can run two tasks: 1) object detection and 2) car
 
     ***Note***: RN18_\<xx\> means the percentage of the pruned weights. For example, RN18_08 means 80% of the weights was pruned, so it is the smallest one here.  
 
-3. OFA (Test)
+3. OFA and ResNet-50
+   The OFA model we used are from ***Model Zoo V2.0***. We integrated them in Vitis-AI library 1.4.
+   
+    | Model        | Accuracy (Top1/Top5 ImageNet-1k)            | Parameter size (MB) | 
+    | ---------- | ----------------- | ----------- | 
+    | OFA700 | 74.9%/92.4% | 10.75   |    
+    | OFA1000 | 77.0%/92.8% | 18.02   |
+    | OFA2000 | 79.7%/94.7% | 32.88   |
+    | ResNet-50 | 83.2%/96.5% | 26.22    |
 
-
-
-## The plugin to get and draw realtime data on frames
+## The plugin to get and draw real-time data on video frames
 
 ![sensor](./media/gifs/chart.gif)
 
@@ -297,35 +312,35 @@ In our demo, we designed a dedicated plugin lib (libivas_xdpuinfer.so) to get da
 
 1. Sample data
 
-    The fist functionality of this lib is getting platform status data. Currently, this lib supports 7 different data sources: 5 preset sources (LPD temperature, FPD temperature, total power consumption, PL temperature and fps) and 2 custom sources. 
+    The fist functionality of this lib is getting platform status data. Currently, this lib supports 7 different data sources: 5 preset sources (LPD temperature, FPD temperature, total power consumption, PL temperature and FPS) and 2 custom sources. 
     
-    When using Preset data sources except fps, the plugin will read the Proc file in the petalinux system to get the platform status. 
+    When using Preset data sources except FPS, the plugin will read the proc file in the petalinux system to get the platform status. 
     
-    When using custom data sources, the plugin will read the data from a custom file. In this way, users can display custom data or use it in other boards (we have tested it in ZCU104). 
+    When using the custom data sources, the plugin will read the data from a custom file. In this way, users can display custom data or use it in other boards (e.g. we have tested it in ZCU104). 
 
-    FPS is a spacial data sources. Plugin calculates the average fps of the current video processing branch. However, it can not get the fps information from other branches, which is inconvenient in 4K mode. In our demo, the fps data can be output to a file, so that the plugin in display branch can read it by using custom data sources. 
+    FPS is a spacial data sources. Plugin calculates the average FPS of the current video processing branch. However, it can not get the fps information from other branches, which is inconvenient in 4K mode. In our demo, the FPS data can be output to a file, so that the plugin in display branch can read it from custom data files. 
     
 
 2. Draw chart
 
-    Another functionality of this lib is to draw waveforms with acceptable performance cost. As shown in the figure, lib can draw the waveform in two different modes: 1) filled mode and 2) line mode. The title and real-time data can also be drawn on the frames.
+    Another functionality of this lib is to draw waveforms with acceptable performance cost. As shown in the performance figure, lib can draw the waveform in two different modes: 1) Filled mode and 2) Line mode. The title and real-time data can also be drawn on the frames.
     
-    Due to CPU costs of Draw, we also provide a number of parameters for optimization. It is supported to disable the title, data and overlay. There is also a optimization option for this lib, so that you can draw half of pixels only on UV planes to lower the costs. In the best case, filled mode costs 150 us, while the line mode costs 50 us.  
+    Due to CPU costs of Draw, we also provide a number of parameters for optimization. It is supported to disable the title, data and overlay. There is also an optimization option for this lib, so that you can draw half of pixels only on UV planes to lower the costs. In the best case, filled mode costs 150 us, while the line mode costs 50 us.  
    
 
 
 ## Host program
 
-To trigger dynamical switch, there is a python host program to interact with the plugins in video processing pipes. Because the host program is a separate program, it uses IPC to read information and send command. 
+To trigger dynamical switch, a Python host program to interact with the plugins in video processing pipeline has been also developped. Because the host program is a separate program, it uses IPC to read information and send command. 
 
 To use the named pipe to control the video pipeline, there are a few steps:
 1. Install the new library file (so) to replace the official plugins. 
 2. Prepare the configuration file (JSON) to set communication methods.   
-3. Use gstreamer to start a pipeline or use the provided shell script to start the video pipeline.
+3. Use Gstreamer to start a pipeline or use the provided shell script to start the video pipeline.
 4. Start the Python program to control the video pipeline by sending commands  
 
 
-All the control interfaces are designed in python. So you can easily control the video pipeline. Here I list the python APIs in our demo for controlling the video pipelines. Please see [host example](./host_program/video-management-%20example.ipynb) for detailed usage.
+All the control interfaces are designed in python. So you can easily control the video pipeline. Here I list the python APIs in our demo for controlling the video pipelines. Please see [host example](./host_program/video-management-%20example.ipynb) for the detailed instructions.
 
 ```python
 class kv260adpModelCtr(object):    
@@ -370,25 +385,45 @@ The CarID model was trained using: [VRIC: Vehicle Re-Identificaton in Context](h
 
 ![VRIC dataset](./media/figures/veri_examples.png)
 
-### Pruning CarID model
-
+To prune the model, we used the Torch-Pruning Pytorch package: [Torch-Pruning](https://github.com/VainF/Torch-Pruning);
 
 
 ### Once-for-all network (OFA)
 
-Once-for-all network (OFA) is also used to generate different sizes of models. 
+[Once-for-all network (OFA)](https://github.com/mit-han-lab/once-for-all) is also used to generate different sizes of models. 
 
 In the demo, we use OFA trained network as a super network as well as searching algorithm, to generate multiple subnetworks according to our requirements. We firstly use latency as an input parameter in the search algorithm. 
 
 ![](./media/figures/ofa_opt.svg)
 
-The figure describes the model generation technique, where Model is optimised in terms of latency and accuracy. In OFA framework, random search is firstly used to determine a set of subnetworks (Subnet N) those are close to the defined latency and  evolutionary search is then used to find out the subnetworks (Subnet K) with highest accuracy among the previously selected set of subnetworks.
+The figure describes the model generation technique, where Model is optimized in terms of latency and accuracy. In OFA framework, random search is firstly used to determine a set of subnetworks (Subnet N) those are close to the defined latency and evolutionary search is then used to find out the subnetworks (Subnet K) with the highest accuracy among the previously selected set of subnetworks.
+
+## Experiment results
+
+### Energy consumption (ZCU104)
+- The total energy consumption has been reduced up to __53.8% and 61.6%__ for car and pedestrian scenarios respectively.
+
+![](./media/figures/energy.png)
+
+### DPU inference latency (ZCU104)
+- The detailed DPU inference latencies for each model is shown in the figure below.
+
+![](./media/figures/latency.png)
+
+### FPS results in different scenarios (ZCU104)
+- By switching the differnt sizes of DNN models at run-time, the FPS has been increased immediately. For example, beyond the switch point the average frame rates are raised from __17.04 FPS to 29.4 FPS and 6.9 FPS to 30.8 FPS__ in car and pedestrian scenarios. Meanwhile, due to finishing tasks early, it also saved energy consumption up to __34%__ in overall.
+
+![](./media/figures/FPS.png)
+
+
+## Conclusion 
+In conclusion, in this project, we have developed a flexible framework that could be integrated into the existing Xilinx Vitis-AI (v1.4.1) and VVAS (v1.0) software packages. The proposed framework is capable of offering high-speed dynamic DNN model switching at run-time for both hardware and software pipelines, which is able to further improve both energy and computing efficiency of the existing video processing pipeline. To verify the framework, we have extended the existing VVAS (v1.0) package, and support more DNN model from Vitis-AI model zoo, and performed extensive testing on both Xilinx KV260 and ZCU104 development boards. 
 
 
 ## Appendix
 
-### Configuration of the Json file for pugin libs
-Here we only list the most import libs, please see [json example](./json_configuration/) for other libs. 
+### Configuration of the JSON file for plugin libs
+Here we only list the most import libs, please see [JSON example](./json_configuration/) for other libs. 
 
 
 #### libivas_xdpuinfer.so
