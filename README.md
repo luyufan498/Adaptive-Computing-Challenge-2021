@@ -366,11 +366,7 @@ Model Zoo has provided a lot of models, which are easy to use. However, most of 
 
 The CarID was trained using [reid_baseline_with_syncbn framework: ](https://github.com/DTennant/reid_baseline_with_syncbn), please follow their installation and configuration instructions on the Github page.
 
-<<<<<<< HEAD
 The CarID model was trained using: [VRIC: Vehicle Re-Identificaton in Context](https://qmul-vric.github.io/)
-=======
-The training dataset used for our model is: [VRIC: Vehicle Re-Identificaton in Context](https://qmul-vric.github.io/)
->>>>>>> 180909bd99cad978f5288b5c21891c1437acfc37
 
 ![VRIC dataset](./media/figures/veri_examples.png)
 
