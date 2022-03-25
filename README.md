@@ -1,4 +1,4 @@
-# Xilinx Adaptive Computing Challenge 2021
+# All-in-one Self-adaptive Computing Platform for Smart City Application
 
 ![LOGO](./media/gifs/LOGO_GIF.gif)
 
