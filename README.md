@@ -354,16 +354,21 @@ In our demo, there are three kinds of  Inter-process communication (IPC) to tran
 
 3. Shared Memory
 
-    Python does not support ***shared memory*** natively to communicate with VVAS plugins. In our demo, it is used to tranfer data between the plugins in different video processing branches.
+    Python does not support ***shared memory*** natively to communicate with VVAS plugins. In our demo, it is used to transfer data between the plugins in different video processing branches.
 
 
 
 ## Generate Models 
 
-Model Zoo has provided a lot of models, which are easy to use. Howver, most of those models are not available in other sizes. Hence, we used two method in our demo to generate different size of models: 1) pruning and 2) OFA.
+Model Zoo has provided a lot of models, which are easy to use. However, most of those models are not available in other sizes. Hence, we used two method in our demo to generate different size of models: 1) pruning and 2) OFA.
 
-### Tranning CarID
+### Training CarID
 
+The CarID was trained using [reid_baseline_with_syncbn framework: ](https://github.com/DTennant/reid_baseline_with_syncbn), please follow the installation and configuration instructions from the Github page.
+
+The training dataset used for our model is:  [VRIC: Vehicle Re-Identificaton in Context](https://qmul-vric.github.io/)
+
+[VRIC dataset](./media/figures/veri_examples.png)
 
 ### OFA model
 
