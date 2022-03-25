@@ -103,7 +103,7 @@ DPU size :B4096 Firmware name: cmpk4096 https://github.com/luyufan498/Adaptive-C
 <img src="./media/figures/firmware-cmpk4096.png" width="400">
 <!-- ![Hardware configuration B4096](./media/figures/firmware-cmpk4096.png)   -->
 
-About the details of different hardware configurations and performance adjustments please see our previous project: [Adaptive deep learning hardware for video analytics](https://www.hackster.io/378085/adaptive-deep-learning-hardware-for-video-analytics-f8d064).
+***For details of different hardware configurations and performance adjustments, please see our previous project in Hackster.io:*** [Adaptive deep learning hardware for video analytics](https://www.hackster.io/378085/adaptive-deep-learning-hardware-for-video-analytics-f8d064).
 
 
 <img src="https://github.com/luyufan498/Adaptive-deep-learning-hardware/raw/main/pic/system.png" width="400">
@@ -359,7 +359,7 @@ class kv260adpModelCtr(object):
 
 In our demo, there are three kinds of Inter-process communication (IPC) to transfer data between host program and gstreamer video pipeline: 
 
-1. Named Pipe (fifo):  
+1. Named Pipe (FIFO):  
     
     Named pipe is the main method in our demo to communicate with VVAS plugins. Our custom plugins read new commands from the named pipe. The path of named pipe can be set in the configuration JSON. Currently, in our demo, it is the most stable method to send commands. 
 
@@ -385,7 +385,7 @@ The CarID model was trained using: [VRIC: Vehicle Re-Identificaton in Context](h
 
 ![VRIC dataset](./media/figures/veri_examples.png)
 
-To prune the model, we used the Torch-Pruning Pytorch package: [Torch-Pruning](https://github.com/VainF/Torch-Pruning);
+To prune the model, we used the Torch-Pruning PyTorch package: [Torch-Pruning](https://github.com/VainF/Torch-Pruning);
 
 
 ### Once-for-all network (OFA)
@@ -411,7 +411,7 @@ The figure describes the model generation technique, where Model is optimized in
 ![](./media/figures/latency.png)
 
 ### FPS results in different scenarios (ZCU104)
-- By switching the differnt sizes of DNN models at run-time, the FPS has been increased immediately. For example, beyond the switch point the average frame rates are raised from __17.04 FPS to 29.4 FPS and 6.9 FPS to 30.8 FPS__ in car and pedestrian scenarios. Meanwhile, due to finishing tasks early, it also saved energy consumption up to __34%__ in overall.
+- By switching the different sizes of DNN models at run-time, the FPS has been increased immediately. For example, beyond the switch point the average frame rates are raised from __17.04 FPS to 29.4 FPS and 6.9 FPS to 30.8 FPS__ in car and pedestrian scenarios. Meanwhile, due to finishing tasks early, it also saved energy consumption up to __34%__ in overall.
 
 ![](./media/figures/FPS.png)
 
