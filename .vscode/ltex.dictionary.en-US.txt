@@ -1,2 +1,12 @@
 Xilinx
 dymanicly
+Refindet
+Openpose
+Yolo
+gstreamer
+VVAS
+xilinx
+vitis
+refinedet
+ReID
+petalinux
