@@ -16,7 +16,7 @@ In this challenge, we have designed a flexible video processing framework on a K
 - PetaLinux 2021.1
 - KV260
 - HDMI monitor and cable
-- HD camera (Option)
+- HD camera (Optional)
 
 
 ## Demo videos
