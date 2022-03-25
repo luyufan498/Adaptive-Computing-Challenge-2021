@@ -10,11 +10,19 @@ Deep neural networks (DNNs) is the key technique in modern artificial intelligen
 
 In this challenge, we have designed a flexible video processing framework on a KV260 SoM, which can be used in a smart camera for intelligent transportation system (ITS) application. Our framework is not only capable to automatically detect application scenarios (e.g. Car or Pedestrian) using a semantic segmentation network, and it is also able to automatically select best of the DNN models for the application scenarios. Thanks for the dynamic reconfiguration and rum-time management APIs, our system is able to dymanicly switching the DNN inference model at run-time without stop the video pipeline. This finally allows our smart camera system to be __truly adaptive__, and achieve the __best performance__ in a __smarter way__.
 
+### Requirements
+- Vitis-AI 1.4.1
+- Vivado 2021.1
+- PetaLinux 2021.1
+- KV260
+- HDMI monitor and cable
+- HD camera (Option)
+
 
 ## Demo videos
 
 
-### Branch switch for different scenarios
+### Branch switch for different scenarios (4k resolution with 4 channels @ 1080p)
 
 ![Scenario switch](./media/gifs/scenarioswitch.gif)
 
