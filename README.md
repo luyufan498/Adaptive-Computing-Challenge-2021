@@ -150,7 +150,8 @@ There are a number of parts in our demo: 1) Gstreamer video processing pipes, 2)
     - Draw pose: [libivas_drawpose.so](./vvas_so_lib/libivas_drawpose.so)
     - Draw box/roadline: [libivas_xboundingbox.so](./vvas_so_lib/libivas_xboundingbox.so)
 
-    __Note__: to create your own VVAS libs for your customized model, please follow VVAS Github: [VVAS_CMPK](./VVAS_CMPK).
+    __Note__: to create your own VVAS libs for your customized model, please follow my projects: [VVAS_CMPK](./VVAS_CMPK).
+
 
 2. **IMPORTANT**: Update gstreamer plugin lib to support multiple inference channel (/usr/lib/).   
     - [libgstivasinpinfermeta-1.0.so.0](./gst_update/libgstivasinpinfermeta-1.0.so.0)
