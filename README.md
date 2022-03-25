@@ -368,7 +368,7 @@ The CarID was trained using [reid_baseline_with_syncbn framework: ](https://gith
 
 The training dataset used for our model is:  [VRIC: Vehicle Re-Identificaton in Context](https://qmul-vric.github.io/)
 
-[VRIC dataset](./media/figures/veri_examples.png)
+![VRIC dataset](./media/figures/veri_examples.png)
 
 ### OFA model
 
