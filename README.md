@@ -36,7 +36,7 @@ This video shows the switch of AI processing branches for different scenarios. A
 ![Inference interval](./media/gifs/Inferenceinterval.gif)  
 
 https://youtu.be/EY3WWD4jYp4  
-This shows the realtime adjustment of inference interval in Jupyter.
+This shows the real-time adjustment of inference interval in Jupyter.
 
 ### Model size and type
 ![Model size](./media/gifs/adjustmodelsize.gif)  
@@ -81,7 +81,7 @@ For different cases, we deployed different hardware configuration for switching.
 <!-- ![Firmware list](./media/figures/firmwares.png) -->
 The bigger DPU (larger size or higher frequency) consumes more power even if there is no AI inference tasks. Hence, using smaller DPU in low workloads can lower the power consumption.
 
-Currently, we use two different sizes of DPU: 1) B3136 and 2) B4096. The hardwre configuration are packaged into the different firmwares. 
+Currently, we use two different sizes of DPU: 1) B3136 and 2) B4096. The hardware configuration is packaged into the different firmware. 
 
 DPU size :B3136  
 <img src="./media/figures/firmware-reid.png" width="400">
@@ -89,7 +89,7 @@ DPU size :B3136
 
 
 
-DPU size :B4096  Firmware name: cmpk4096  https://github.com/luyufan498/Adaptive-Computing-Challenge-2021/tree/main/firmware   
+DPU size :B4096 Firmware name: cmpk4096 https://github.com/luyufan498/Adaptive-Computing-Challenge-2021/tree/main/firmware   
 <img src="./media/figures/firmware-cmpk4096.png" width="400">
 <!-- ![Hardware configuration B4096](./media/figures/firmware-cmpk4096.png)   -->
 
@@ -123,7 +123,7 @@ ttps://www.hackster.io/378085/adaptive-deep-learning-hardware-for-video-analytic
 
 ## To run the demo
 
-There are a number of parts in our demo: 1) gstreamer video processing pipes, 2) host program for management and 3) hardware firmwares. Please follow the instructions blow to to run the demo.
+There are a number of parts in our demo: 1) gstreamer video processing pipes, 2) host program for management and 3) hardware firmware. Please follow the instructions blow to run the demo.
 
 ### Set up the environment
 
@@ -172,7 +172,7 @@ There are a number of parts in our demo: 1) gstreamer video processing pipes, 2)
 
 ### Set up and run host program
 
-5. Download [Host program](./host_program/video-management-%20example.ipynb) to kv260. Use jupyter to run it.
+5. Download [Host program](./host_program/video-management-%20example.ipynb) to kv260. Use Jupyter to run it.
     
     Example use of python interfaces:
     ```python
@@ -200,20 +200,20 @@ There are a number of parts in our demo: 1) gstreamer video processing pipes, 2)
 
 ## Gstreamer video processing pipes in the demo
 ###  Architecture of the video processing pipes:
- The structure of video processing pipes is as follow. In our demo, there are two types of branches: 1) management branch and 2) main AI inference branch.
+ The structure of video processing pipes is as follows. In our demo, there are two types of branches: 1) management branch and 2) main AI inference branch.
 
-![architecture of the video pipeline ](./media/figures/pipelinestructure.svg)   
+![Architecture of the video pipeline ](./media/figures/pipelinestructure.svg)   
 (Figure: video pipeline in 1080P mode.)
 
 ![](./media/gifs/1080p-carid1.gif)
 
-In the one channel (1080P) mode, everything will be draw on the same 1080P output. As shown in the video, the segmentation result from management branch and data waveform are put on the top right corner of frames. Users can 
+In the one channel (1080P) mode, everything will be drawn on the same 1080P output. As shown in the video, the segmentation result from management branch and data waveform are put in the top right corner of frames. The size and the position can be adjusted by configuration files.
 
 
-**In the 1080P mode, the inference information from different branch needs to be drawn on the same frame. However the original Meta Affixer plugin does not support conbination of inference results from different branches. it returns error, when there are muliple inference results. We modified the gstreamer plugin (libgstivasinpinfermeta) to support this feature. Now, the info from the master sink port will be kept, while others will be dropped.**
+**In the 1080P mode, the inference information from different branch needs to be drawn on the same frame. However, the original Meta Affixer plugin does not support combination of inference results from different branches. It returns error, when there are multiple inference results. We modified the gstreamer plugin (libgstivasinpinfermeta) to support this feature. Now, the info from the master sink port will be kept, while others will be dropped.**
 
 
-![architecture of the video pipeline 4k ](./media/figures/pipelinestructure4k.svg)    
+![Architecture of the video pipeline 4k ](./media/figures/pipelinestructure4k.svg)    
 (Figure: video pipeline in 4K mode.)
 
 **In the 4K mode, there is a separate branch (1080p) to draw waveform and UI.**
@@ -221,54 +221,54 @@ In the one channel (1080P) mode, everything will be draw on the same 1080P outpu
 ![](./media/gifs/4k_reid_yolo.gif)
 
 
-In the four channels (4k) mode, the output is 4K resolution. The results drawn on 4 1080P videos streams. As shown in the video, the segmentation results from management branch is put on the top left corner, while the data waveforms are put on the top right.  The results from branch 1 and 2 are put on the bottom.
+In the four channels (4k) mode, the output is 4K resolution. The results drawn on 4 1080P videos streams. As shown in the video, the segmentation results from management branch is put in the top left corner, while the data waveforms are put on the top right.  The results from branch 1 and 2 are put on the bottom.
 
 
 
 
 ### management branch:
 
-The management branch is responible for checking the scenerio of input videos. As shown in the figures, the management branch runs as a asistant branch with the main AI inference branch.  This branch takes a copyed video stream from main AI inference branch as input, so that it can monitor the video stream simultaneously.
+The management branch is responsible for checking the scenario of input videos. As shown in the figures, the management branch runs as an assistant branch with the main AI inference branch.  This branch takes a copied video stream from main AI inference branch as input, so that it can monitor the video stream simultaneously.
 
 ***Note***: considering performance costs, the AI inference in management branch runs on seconds basis. The inference interval can be adjusted by pre-designed interfaces in real time.
     
-In our demo, we include two kinds of models for scenerio classification:
+In our demo, we include two kinds of models for scenario classification:
 
 1. For segmentation 
-    There are two models from ***Model Zoo*** are used in our demo to satisfy different requirments of the accuracy:        
+    There are two models from ***Model Zoo*** are used in our demo to satisfy different requirements of the accuracy:        
     - pt_ENet_cityscapes_512_1024_8.6G_2.0
     - pt_SemanticFPN-resnet18_cityscapes_256_512_10G_2.0 
 
     *Note1*: The input size of "512*1024" decreases the performance significantly.  
-    *Note2*: current VVAS on KV260 does not support segmentation officially. we use custom pulgins to support Segmentation.
+    *Note2*: current VVAS on KV260 does not support segmentation officially. We use custom plugins to support Segmentation.
 
 2. Lane detection:
     Lane detection are very useful to detect the region of interest. We use the model for the model zoo:
     - cf_VPGnet_caltechlane_480_640_0.99_2.5G_2.0
         
-    *Note*: current VVAS on KV260 does not support Lane detection officially. we use custom pulgins to support Lane detection.
+    *Note*: current VVAS on KV260 does not support Lane detection officially. We use custom plugins to support Lane detection.
 
 
 ### Main AI inference branches:
-The main AI inference branches are responible to operate AI models for corresponding scenairos. In our demo, we include two typical scenarios for smart city system: 1) people scenario and 2) car scenario. Videos from different sceniaros will be proccessed by corresponding branches. If the scenario is not detected, the corresponding branch will also be disabled.
+The main AI inference branches are responsible to operate AI models for corresponding scenarios. In our demo, we include two typical scenarios for smart city system: 1) people scenario and 2) car scenario. Videos from different scenarios will be processed by corresponding branches. If the scenario is not detected, the corresponding branch will also be disabled.
 
 ![Video pipeline](./media/figures/pipelines.svg)  
 (Figure: Pipeline of the management branch)
 
-the structures of the video pipeline are shown in the figure. Considering the different requirements of applications, the video procesing pipe can run one stage or two stage AI inference. 'Video Pipe (a)' represents a typical one stage AI application (e.g. object detection and segmentation), where there is only one AI model to conduct the inference once per frame. 'Video Pipe (b)' represents a two-stage AI application (e.g. tracking, REID and car plates detection), where there are two AI models ruining simultaneously and the second one may run multiple times due the detection results from the first one.
+The structures of the video pipeline are shown in the figure. Considering the different requirements of applications, the video processing pipe can run one stage or two stage AI inference. 'Video Pipe (a)' represents a typical one stage AI application (e.g. object detection and segmentation), where there is only one AI model to conduct the inference once per frame. 'Video Pipe (b)' represents a two-stage AI application (e.g. tracking, REID and car plates detection), where there are two AI models ruining simultaneously and the second one may run multiple times due the detection results from the first one.
 
 #### Branch for people scenarios:
 In people scenarios, the demo can run three kinds of tasks: 1) people detection, 2) ReID and 3) opse detection. 
 1. people detection: refinedet. It is from the kv260 ReID example. 
-2. ReID: refinedet + crop +personid + tracking. It is from the Kv260 ReID example. 
+2. ReID: refinedet + crop + personid + tracking. It is from the Kv260 ReID example. 
 3. opse detection: refinedet + crop + spnet.
     ***Note***: we use cf_SPnet_aichallenger_224_128_0.54G_2.0 from Xilinx ***Model Zoo***.
 
 
 #### Branch for car scenarios:
-In the car scenarios, the demo can run two task: 1) object detection and 2) car track.
+In the car scenarios, the demo can run two tasks: 1) object detection and 2) car track.
     
-1. yolo 
+1. Yolo 
     The object detection models we used are from ***Model Zoo***. We integrate 4 sizes of yolo models in our demo, so that we can dynamically switch it according the video processing speed.  
     -	dk_yolov2_voc_448_448_34G_2.0
     -   dk_yolov2_voc_448_448_0.66_11.56G_2.0
@@ -297,35 +297,35 @@ In our demo, we designed a dedicated plugin lib (libivas_xdpuinfer.so) to get da
 
 1. Sample data
 
-    The fist functionality of this lib is getting platform status data. Currently, this lib supports 7 different data sources: 5 preset sources (lpd temperature, fpd temperature, total power, PL temperature and fps) and 2 custom sources. 
+    The fist functionality of this lib is getting platform status data. Currently, this lib supports 7 different data sources: 5 preset sources (LPD temperature, FPD temperature, total power consumption, PL temperature and fps) and 2 custom sources. 
     
-    When using Preset data sources except fps, the plugin will read the proc file in the petalinux system to get the platform status. 
+    When using Preset data sources except fps, the plugin will read the Proc file in the petalinux system to get the platform status. 
     
     When using custom data sources, the plugin will read the data from a custom file. In this way, users can display custom data or use it in other boards (we have tested it in ZCU104). 
 
-    FPS is a spacial data sources. Plugin calculates the average fps of the current video processing branch. However it can not get the fps information from other branches, which is inconvenient in 4K mode. In our demo, the fps data can be output to a file, so that the plugin in display branch can read it by using custom data sources. 
+    FPS is a spacial data sources. Plugin calculates the average fps of the current video processing branch. However, it can not get the fps information from other branches, which is inconvenient in 4K mode. In our demo, the fps data can be output to a file, so that the plugin in display branch can read it by using custom data sources. 
     
 
 2. Draw chart
 
-    Another functionality of this lib is to draw waveforms with acceptable performance cost. As shown in the figure, lib can draw the waveform in two different modes: 1) filled mode and 2) line mode. The title and realtime data can also be drawn on the frames.
+    Another functionality of this lib is to draw waveforms with acceptable performance cost. As shown in the figure, lib can draw the waveform in two different modes: 1) filled mode and 2) line mode. The title and real-time data can also be drawn on the frames.
     
-    Due CPU costs of Draw, we also provde a number of paramenters for optimization. It is supproted to disable the title, data and overlay. There is also a optimization option for this lib, so that you can draw half of pixels only on UV planes to lower the costs. In the best case, filled mode costs 150 us, while the line mode costs 50 us.  
+    Due to CPU costs of Draw, we also provide a number of parameters for optimization. It is supported to disable the title, data and overlay. There is also a optimization option for this lib, so that you can draw half of pixels only on UV planes to lower the costs. In the best case, filled mode costs 150 us, while the line mode costs 50 us.  
    
 
 
 ## Host program
 
-To trigger dynamical switch, there is a python host program to interact with video pipeplines. Because the host program is a separate program, it use IPC to read infomation and send command. 
+To trigger dynamical switch, there is a python host program to interact with the plugins in video processing pipes. Because the host program is a separate program, it uses IPC to read information and send command. 
 
-To use the named pipe to control the video pipeline, there are a few step:
+To use the named pipe to control the video pipeline, there are a few steps:
 1. Install the new library file (so) to replace the official plugins. 
-2. Prepare the configuration file (json) to set communication methods.   
-3. Use gstreamer to start a pipeline or use the my shell script to strat the video pipeline.
-4. start the Python program to control the video pipeline by sending commands  
+2. Prepare the configuration file (JSON) to set communication methods.   
+3. Use gstreamer to start a pipeline or use the provided shell script to start the video pipeline.
+4. Start the Python program to control the video pipeline by sending commands  
 
 
-All the control interfaces are designed in python. So you can easily control the video pipeline. Here I list the python APIs in our demo for controling the video pipelines. Please see [host example](./host_program/video-management-%20example.ipynb) for detailed usage.
+All the control interfaces are designed in python. So you can easily control the video pipeline. Here I list the python APIs in our demo for controlling the video pipelines. Please see [host example](./host_program/video-management-%20example.ipynb) for detailed usage.
 
 ```python
 class kv260adpModelCtr(object):    
@@ -342,15 +342,15 @@ class kv260adpModelCtr(object):
 
 ### Communication between plugins and the host:
 
-In our demo, there are three kinds of  Inter-process communication (IPC) to transfer data between host program and gstreamer video pipeline: 
+In our demo, there are three kinds of Inter-process communication (IPC) to transfer data between host program and gstreamer video pipeline: 
 
 1. Named Pipe (fifo):  
     
-    Named pipe is the main method in our demo to communicate with VVAS plugins. Our custom plugins read new commonds from the named pipe. The path of named pipe can be set in the configuration json. Currently in our demo, it is the most reponsible method to send commands. 
+    Named pipe is the main method in our demo to communicate with VVAS plugins. Our custom plugins read new commands from the named pipe. The path of named pipe can be set in the configuration JSON. Currently, in our demo, it is the most stable method to send commands. 
 
 2. File:
 
-    For convenience, it is also supported to used file to report running status of the VVAS processing pipeline. For example, our plugin can output the segmentation results to a file for further analysis. The path of the output file can be set in the configuration. Note: Alougth it is easy for host program to access, writing file does cost more time. 
+    For convenience, it is also supported to used file to report running status of the VVAS processing pipeline. For example, our plugin can output the segmentation results to a file for further analysis. The path of the output file can be set in the configuration. Note: Although it is easy for host program to access, writing file does cost more time. 
 
 3. Shared Memory
 
@@ -366,7 +366,11 @@ Model Zoo has provided a lot of models, which are easy to use. However, most of 
 
 The CarID was trained using [reid_baseline_with_syncbn framework: ](https://github.com/DTennant/reid_baseline_with_syncbn), please follow their installation and configuration instructions on the Github page.
 
+<<<<<<< HEAD
 The CarID model was trained using: [VRIC: Vehicle Re-Identificaton in Context](https://qmul-vric.github.io/)
+=======
+The training dataset used for our model is: [VRIC: Vehicle Re-Identificaton in Context](https://qmul-vric.github.io/)
+>>>>>>> 180909bd99cad978f5288b5c21891c1437acfc37
 
 ![VRIC dataset](./media/figures/veri_examples.png)
 
@@ -634,9 +638,9 @@ It is just a UI plugin to indicate if the branch is running.
 
 | Key        | value             | description | 
 | ---------- | ----------------- | ----------- | 
-| senor_mode | 0 - 6 |0:LPD_TMEP,1:FPD_TMEP,2:PL_TEMP,3:POWER,4:FPS. 5~6: custom data (long,float) based on path and scale |
-| sensor_path | path  | Read data (e.g. power and temperature) from file.  Only works when senor mode is 5 or 6.  Very usefull for reading proc file system in Linux.|
-| sensor_scale |float | Scale of the value from the file. For example, if you wan do a power unit conversion from microwatt to watt, you can put 0.001 here  |
+| senor_mode | 0 - 6 |0:LPD_TMEP,1:FPD_TMEP,2:PL_TEMP,3:POWER,4:FPS. 5~6: custom data (long, float) based on path and scale |
+| sensor_path | path  | Read data (e.g. power and temperature) from file.  Only works when sensor mode is 5 or 6.  Very usefull for reading proc file system in Linux.|
+| sensor_scale |float | Scale of the value from the file. For example, if you want do a power unit conversion from microwatt to watt, you can put 0.001 here  |
 | | | |
 | enable_fps | bool | This plugin can also report fps of the current branch |
 | fps_window_len | int  | Number of point for calculating the average fps  |
