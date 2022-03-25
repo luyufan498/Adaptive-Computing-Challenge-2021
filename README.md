@@ -1,4 +1,4 @@
-# All-in-one Self-adaptive Computing Platform for Smart City Application
+# All-in-one Self-adaptive Computing Platform for Smart City Applications
 
 ![LOGO](./media/gifs/LOGO_GIF.gif)
 
