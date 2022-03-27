@@ -1,9 +1,59 @@
-# All-in-one Self-adaptive Computing Platform for Smart City Applications
+# All-in-one Self-adaptive Computing Platform for Smart City Applications {ignore=true}
 
 ![LOGO](./media/gifs/LOGO_GIF2.gif)
 
 
-## Introduction
+## Content
+
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
+- [Content](#content)
+- [1. Introduction](#1-introduction)
+  - [Key features/functions](#key-featuresfunctions)
+  - [Requirements](#requirements)
+- [2. Demo videos](#2-demo-videos)
+  - [Branch switch for different scenarios (4k resolution with 4 channels @ 1080p)](#branch-switch-for-different-scenarios-4k-resolution-with-4-channels-1080p)
+  - [Inference interval](#inference-interval)
+  - [Model size and type](#model-size-and-type)
+  - [Adaptive optimization](#adaptive-optimization)
+  - [Dynamic Hardware switching](#dynamic-hardware-switching)
+- [3. Detailed instructions to run the demo](#3-detailed-instructions-to-run-the-demo)
+  - [Environment setup](#environment-setup)
+  - [Gstreamer video processing pipes](#gstreamer-video-processing-pipes)
+  - [Set up and run host program](#set-up-and-run-host-program)
+  - [Switch of Hardware design](#switch-of-hardware-design)
+- [4. Gstreamer video processing pipes in the demo](#4-gstreamer-video-processing-pipes-in-the-demo)
+  - [Architecture of the video processing pipeline:](#architecture-of-the-video-processing-pipeline)
+  - [Management branch:](#management-branch)
+  - [Main AI inference branches:](#main-ai-inference-branches)
+    - [Branch for people scenario:](#branch-for-people-scenario)
+    - [Branch for car scenarios:](#branch-for-car-scenarios)
+- [5. The plugin to get and draw real-time data on video frames](#5-the-plugin-to-get-and-draw-real-time-data-on-video-frames)
+- [6. Host program](#6-host-program)
+  - [Communication between plugins and the host:](#communication-between-plugins-and-the-host)
+- [7. Generate Models](#7-generate-models)
+  - [Training CarID](#training-carid)
+  - [Once-for-all network (OFA)](#once-for-all-network-ofa)
+- [8. Experiment results](#8-experiment-results)
+  - [Energy consumption (ZCU104)](#energy-consumption-zcu104)
+  - [DPU inference latency (ZCU104)](#dpu-inference-latency-zcu104)
+  - [FPS results in different scenarios (ZCU104)](#fps-results-in-different-scenarios-zcu104)
+- [9. Conclusion](#9-conclusion)
+- [10. Appendix](#10-appendix)
+  - [Configuration of the JSON file for plugin libs](#configuration-of-the-json-file-for-plugin-libs)
+    - [libivas_xdpuinfer.so](#libivas_xdpuinferso)
+    - [libivas_xdpuinfer.so](#libivas_xdpuinferso-1)
+    - [libivas_runindicater.so](#libivas_runindicaterso)
+    - [libivas_sensor.so](#libivas_sensorso)
+    - [gst_1080P.sh](#gst_1080psh)
+
+<!-- /code_chunk_output -->
+
+
+
+## 1. Introduction
 
 Deep neural networks (DNNs) is the key technique in modern artificial intelligence (AI) that has provided state-of-the-art accuracy on many applications, and due to this, they have received significant interest. The ubiquity of smart devices and autonomous robot systems are placing heavy demands on DNNs-inference hardware with high energy and computing efficiencies along with rapid development of AI techniques. The high energy efficiency, computing capabilities and reconfigurability of FPGA make it a promising platform for hardware acceleration of such computing tasks. 
 
@@ -27,7 +77,7 @@ In this challenge, we have designed a flexible video processing framework on a K
 - HD camera (Optional)
 
 
-## Demo videos
+## 2. Demo videos
 
 
 ### Branch switch for different scenarios (4k resolution with 4 channels @ 1080p)
@@ -128,7 +178,7 @@ DPU size :B4096 Firmware name: cmpk4096 https://github.com/luyufan498/Adaptive-C
 
 ## Use Model in the demo design -->
 
-## Detailed instructions to run the demo
+## 3. Detailed instructions to run the demo
 
 There are a number of parts in our demo: 1) Gstreamer video processing pipes, 2) Host program for management and 3) Hardware firmware. Please follow the instructions to run the demo.
 
@@ -206,7 +256,7 @@ There are a number of parts in our demo: 1) Gstreamer video processing pipes, 2)
         sudo xmutil unloadapp
         sudo xmutil loadapp cmpk4096
 
-## Gstreamer video processing pipes in the demo
+## 4. Gstreamer video processing pipes in the demo
 ###  Architecture of the video processing pipeline:
  The structure of video processing pipes is as follows. In our demo, there are two types of branches: 1) management branch and 2) main AI inference branch.
 
@@ -220,17 +270,19 @@ In the one channel (1080P) mode, everything will be drawn on the same 1080P outp
 
 **In the 1080P mode, the inference information from different branch needs to be drawn on the same frame. However, the original Meta Affixer plugin does not support combination of inference results from different branches. It returns error, when there are multiple inference results. We modified the gstreamer plugin (libgstivasinpinfermeta) to support this feature. Now, the info from the master sink port will be kept, while others will be dropped.**
 
+The shell script for 1080P can be downloaded: [gst_1080p.sh](./shell-scripts/gst_1080P.sh). Please see appendix for more details.
 
 ![Architecture of the video pipeline 4k](./media/figures/pipelinestructure4k.svg)    
 (Figure: video pipeline in 4K mode.)
 
 **In the 4K mode, there is a separate branch (1080p) to draw waveforms and GUI.**
 
-![](./media/gifs/4k_reid_yolo.gif)
+![](./media/gifs/4k_reid_yolo.gif) 
 
 
 In the four channels (4k) mode, the output is 4K resolution. The results drawn on 4 1080P videos streams. As shown in the video, the segmentation results from management branch is put in the top left corner, while the data waveforms are put on the top right.  The results from branch 1 and 2 are put on the bottom.
 
+The shell script for 4K can be downloaded: [gst_4k.sh](./shell-scripts/gst_4k.sh.sh). Please see appendix for more details.
 
 
 
@@ -302,7 +354,7 @@ In the car scenarios, the demo can run two tasks: 1) object detection and 2) car
     | OFA2000 | 79.7%/94.7% | 32.88   |
     | ResNet-50 | 83.2%/96.5% | 26.22    |
 
-## The plugin to get and draw real-time data on video frames
+## 5. The plugin to get and draw real-time data on video frames
 
 ![sensor](./media/gifs/chart.gif)
 
@@ -328,7 +380,7 @@ In our demo, we designed a dedicated plugin lib (libivas_xdpuinfer.so) to get da
    
 
 
-## Host program
+## 6. Host program
 
 To trigger dynamical switch, a Python host program to interact with the plugins in video processing pipeline has been also developped. Because the host program is a separate program, it uses IPC to read information and send command. 
 
@@ -372,7 +424,7 @@ In our demo, there are three kinds of Inter-process communication (IPC) to trans
 
 
 
-## Generate Models 
+## 7. Generate Models 
 
 Model Zoo has provided a lot of models, which are easy to use. However, most of those models are not available in other sizes. Hence, we used two method in our demo to generate different size of models: 1) pruning and 2) OFA.
 
@@ -397,7 +449,7 @@ In the demo, we use OFA trained network as a super network as well as searching 
 
 The figure describes the model generation technique, where Model is optimized in terms of latency and accuracy. In OFA framework, random search is firstly used to determine a set of subnetworks (Subnet N) those are close to the defined latency and evolutionary search is then used to find out the subnetworks (Subnet K) with the highest accuracy among the previously selected set of subnetworks.
 
-## Experiment results
+## 8. Experiment results
 
 ### Energy consumption (ZCU104)
 - The total energy consumption has been reduced up to __53.8% and 61.6%__ for car and pedestrian scenarios respectively.
@@ -414,12 +466,11 @@ The figure describes the model generation technique, where Model is optimized in
 
 ![](./media/figures/FPS.png)
 
-
-## Conclusion 
+## 9. Conclusion 
 In conclusion, in this project, we have developed a flexible framework that could be integrated into the existing Xilinx Vitis-AI (v1.4.1) and VVAS (v1.0) software packages. The proposed framework is capable of offering high-speed dynamic DNN model switching at run-time for both hardware and software pipelines, which is able to further improve both energy and computing efficiency of the existing video processing pipeline. To verify the framework, we have extended the existing VVAS (v1.0) package, and support more DNN model from Vitis-AI model zoo, and performed extensive testing on both Xilinx KV260 and ZCU104 development boards. 
 
 
-## Appendix
+## 10. Appendix
 
 ### Configuration of the JSON file for plugin libs
 Here we only list the most import libs, please see [JSON example](./json_configuration/) for other libs. 
@@ -693,6 +744,22 @@ It is just a UI plugin to indicate if the branch is running.
 | max_sample_points | int | |
 | max_display_value | float | |
 | min_display_value | float | |
+
+
+
+
+
+#### gst_1080P.sh
+
+Download the source file: [gst_1080P.sh](./shell-scripts/gst_1080P.sh)
+
+This shell script can start video pipeline with the firmware of ***kv260-smartcam***.
+
+To start this 
+
+
+
+
 
 
 
