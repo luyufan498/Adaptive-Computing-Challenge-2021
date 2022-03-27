@@ -195,7 +195,7 @@ There are a number of parts in our demo: 1) Gstreamer video processing pipes, 2)
 1. (Optional) For your convenience, I have packaged everything you need into [KV260_ALL_YOU_NEED.ZIP](https://drive.google.com/file/d/1N8x7gpwLpRtQlCu-r8Hx58hQGSzwCZY_/view?usp=sharing). You can just download it and overwrite to the root of your KV260 system.  If you are using the packaged ZIP file, you can skip the following steps.
 
 
-### Gstreamer video processing pipes
+### Library, configuration and models
 
 2. Download our customized VVAS libs to kv260 (/opt/xilinx/lib/):
     - dpuinfer for AI inference to support new model and switch: [libivas_xdpuinfer.so](./vvas_so_lib/libivas_xdpuinfer.so)
