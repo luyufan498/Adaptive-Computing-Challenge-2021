@@ -1,4 +1,5 @@
 # All-in-one Self-adaptive Computing Platform for Smart City Applications 
+<!-- {ignore=true} -->
 
 ![LOGO](./media/gifs/LOGO_GIF2.gif)
 
@@ -47,7 +48,9 @@
     - [libivas_xdpuinfer.so](#libivas_xdpuinferso-1)
     - [libivas_runindicater.so](#libivas_runindicaterso)
     - [libivas_sensor.so](#libivas_sensorso)
+  - [Shell Scripts](#shell-scripts)
     - [gst_1080P.sh](#gst_1080psh)
+    - [gst_4k.sh](#gst_4ksh)
 
 <!-- /code_chunk_output -->
 
@@ -747,7 +750,7 @@ It is just a UI plugin to indicate if the branch is running.
 
 
 
-
+### Shell Scripts
 
 #### gst_1080P.sh
 
@@ -785,7 +788,7 @@ If you want run ***Yolo*** with MIPI camera as input:
 
 Download the source file: [gst_4k.sh](./shell-scripts/gst_4k.sh)
 
-***Note:***: to run this shell script, firmware of ***kv260-aibox-reid or cmpk4096*** has to be loaded.
+***Note*** :to run this shell script, firmware of ***kv260-aibox-reid or cmpk4096*** has to be loaded.
 
 
 This script can take parameters as inputs, the following table shows the parameters:
