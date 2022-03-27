@@ -192,8 +192,7 @@ There are a number of parts in our demo: 1) Gstreamer video processing pipes, 2)
 0. Follow the [official instructions](https://xilinx.github.io/kria-apps-docs/main/build/html/index.html) to set up KV260 (smart camera and AIBox-ReID are needed).
 
 
-1. (Optional) For your convenience, I have packaged every thing you need into a ZIP file. You can just download it and overwrite to the root of your KV260 system.  If you are using the packaged ZIP file, you can skip the following steps.
-
+1. (Optional) For your convenience, I have packaged everything you need into [KV260_ALL_YOU_NEED.ZIP](https://drive.google.com/file/d/1N8x7gpwLpRtQlCu-r8Hx58hQGSzwCZY_/view?usp=sharing). You can just download it and overwrite to the root of your KV260 system.  If you are using the packaged ZIP file, you can skip the following steps.
 
 
 ### Gstreamer video processing pipes
