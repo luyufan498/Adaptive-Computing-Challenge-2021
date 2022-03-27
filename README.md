@@ -185,14 +185,20 @@ DPU size :B4096 Firmware name: cmpk4096 https://github.com/luyufan498/Adaptive-C
 
 There are a number of parts in our demo: 1) Gstreamer video processing pipes, 2) Host program for management and 3) Hardware firmware. Please follow the instructions to run the demo.
 
+
 ### Environment setup 
+
 
 0. Follow the [official instructions](https://xilinx.github.io/kria-apps-docs/main/build/html/index.html) to set up KV260 (smart camera and AIBox-ReID are needed).
 
 
+1. (Optional) For your convenience, I have packaged every thing you need into a ZIP file. You can just download it and overwrite to the root of your KV260 system.  If you are using the packaged ZIP file, you can skip the following steps.
+
+
+
 ### Gstreamer video processing pipes
 
-1. Download our customized VVAS libs to kv260 (/opt/xilinx/lib/):
+2. Download our customized VVAS libs to kv260 (/opt/xilinx/lib/):
     - dpuinfer for AI inference to support new model and switch: [libivas_xdpuinfer.so](./vvas_so_lib/libivas_xdpuinfer.so)
     - Crop for Openopse: [libivas_crop_openopse.so](./vvas_so_lib/libivas_crop_openopse.so)
     - To support Openopse: [libivas_openpose.so](./vvas_so_lib/libivas_openpose2.so)
@@ -206,32 +212,159 @@ There are a number of parts in our demo: 1) Gstreamer video processing pipes, 2)
     __Note__: to create your own VVAS libs for your customized model, please follow my projects: [VVAS_CMPK](./VVAS_CMPK).
 
 
-2. **IMPORTANT**: Update gstreamer plugin lib to support multiple inference channel (/usr/lib/).   
-    - [libgstivasinpinfermeta-1.0.so.0](./gst_update/libgstivasinpinfermeta-1.0.so.0)
-    - [libgstivasinpinfermeta-1.0.so.0.1602.0](./gst_update/libgstivasinpinfermeta-1.0.so.0.1602.0)
+
+    Your folder should look like this:
+
+    <img src="./media/figures/libs.png" width="400">
+
+
+3. **IMPORTANT**: Update gstreamer plugin lib to support multiple inference channels (/usr/lib/).   
+    - [libgstivasinfermeta-1.0.so.0](./gst_update/libgstivasinfermeta-1.0.so.0)
+    - [libgstivasinfermeta-1.0.so.0.1602.0](./gst_update/libgstivasinfermeta-1.0.so.0.1602.0)
 
     *Note*: need sudo to overwrite original files.
 
-2. Download [new models](./models/models.zip) and extract to kv260 (/opt/xilinx/share/vitis_ai_library/):
+4. Download [new models](./models/models.zip) and extract to kv260 (/opt/xilinx/share/vitis_ai_library/):
+
+After that your model folder should look like this:
+``` shell
+xilinx-k26-starterkit-2021_1:~$ tree /opt/xilinx/share/vitis_ai_library/ -L 3
+/opt/xilinx/share/vitis_ai_library/
+`-- models
+    |-- B3136
+    |   |-- ENet_cityscapes_pt
+    |   |-- SemanticFPN_cityscapes_256_512
+    |   |-- caltechlane
+    |   |-- carid
+    |   |-- densebox_640_360
+    |   |-- personreid-res18_pt
+    |   |-- refinedet_pruned_0_96
+    |   |-- sp_net
+    |   |-- ssd_adas_pruned_0_95
+    |   |-- yolov2_voc
+    |   `-- yolov3_city
+    |-- kv260-aibox-reid
+    |   |-- personreid-res18_pt
+    |   `-- refinedet_pruned_0_96
+    `-- kv260-smartcam
+        |-- densebox_640_360
+        |-- refinedet_pruned_0_96
+        `-- ssd_adas_pruned_0_95
+
+20 directories, 0 files
+
+```
 
 
-3. Download [new json file for VVAS configuration](./json_configuration/ivas.zip) and extract to kv260 (/opt/xilinx/share)  
+5. Download [new json file for VVAS configuration](./json_configuration/ivas.zip) and extract to kv260 (/opt/xilinx/share)  
     **Note**: Please find the appendix section for description of configuration. 
 
-4. Now, you should be ready run the video pipeline. Download [scripts to start video pipeline](./shell-scripts/gst_reid_4k.sh) to /home/scripts/.
+
+After that your model folder should look like this:
+```shell
+xilinx-k26-starterkit-2021_1:~$ tree /opt/xilinx/share/ivas/ -L 3
+/opt/xilinx/share/ivas/
+|-- aibox-reid
+|   |-- crop.json
+|   |-- dpu_seg.json
+|   |-- draw_reid.json
+|   |-- ped_pp.json
+|   |-- refinedet.json
+|   `-- reid.json
+|-- branch1
+|   |-- drawPipelinestatus.json
+|   |-- drawfpsB1.json
+|   `-- fpsbranch1.json
+|-- branch2
+|   |-- dpu_yolo2.json
+|   |-- drawPipelinestatus.json
+|   |-- drawbox.json
+|   |-- fpsbranch2.json
+|   `-- ped_pp.json
+|-- cmpk
+|   |-- analysis
+|   |   |-- 4K
+|   |   `-- drawTemp.json
+|   |-- openpose
+|   |   |-- crop.json
+|   |   |-- draw_pose.json
+|   |   `-- openpose.json
+|   |-- preprocess
+|   |   |-- resize_cmpk.json
+|   |   |-- resize_reid.json
+|   |   `-- resize_smartcam.json
+|   |-- reid
+|   |   |-- carid.json
+|   |   |-- crop.json
+|   |   |-- draw_reid.json
+|   |   `-- reid.json
+|   |-- runstatus
+|   |   |-- pp1status.json
+|   |   `-- pp2status.json
+|   `-- segmentation
+|       |-- dpu_seg.json
+|       |-- dpu_seg_large.json
+|       |-- drawSegmentation.json
+|       |-- drawSegmentationLR.json
+|       |-- drawSegmentationTR.json
+|       `-- preprocess_seg_smartcam.json
+`-- smartcam
+    |-- facedetect
+    |   |-- aiinference.json
+    |   |-- drawresult.json
+    |   `-- preprocess.json
+    |-- myapp
+    |   |-- dpu_seg.json
+    |   |-- dpu_ssd.json
+    |   |-- dpu_yolo2.json
+    |   |-- drawPLTemp.json
+    |   |-- drawPerformance.json
+    |   |-- drawPipelinestatus.json
+    |   |-- drawPower.json
+    |   |-- drawSegmentation.json
+    |   |-- drawTemp.json
+    |   |-- drawbox.json
+    |   |-- preprocess.json
+    |   `-- preprocess_seg.json
+    |-- refinedet
+    |   |-- aiinference.json
+    |   |-- drawresult.json
+    |   `-- preprocess.json
+    |-- ssd
+    |   |-- aiinference.json
+    |   |-- drawresult.json
+    |   |-- label.json
+    |   `-- preprocess.json
+    |-- yolov2_voc
+    |   |-- aiinference.json
+    |   |-- drawresult.json
+    |   |-- label.json
+    |   `-- preprocess.json
+    `-- yolov3_city
+        |-- aiinference.json
+        |-- drawresult.json
+        |-- label.json
+        `-- preprocess.json
+
+```
+
+
+
+6. Now, you should be ready run the video pipeline. Download [scripts to start video pipeline](./shell-scripts/gst_4k.sh) to /home/scripts/.
    
-   The provided shell scripts can take input parameters for the configuration of video processing :
-
-
+   <!-- The provided shell scripts can take input parameters for the configuration of video processing :
         Help:
         -f video file source
         -b (optional) segmentation use black background
         -r (optional) model for branch 1  [(reid), openopse]
-        -s (optional) to sync videos or not
+        -s (optional) to sync videos or not -->
 
     Use the following command to run video pipeline:
 
         sudo ./scripts/gst_reid_4k2.sh -f <video> -r <AI program>
+    
+    For details, please see appendix section: [gst_4k.sh](#gst_4ksh)
+
 
 ### Set up and run host program
 
@@ -252,6 +385,9 @@ There are a number of parts in our demo: 1) Gstreamer video processing pipes, 2)
     modelctr = kv260adpModelCtr("/home/petalinux/.temp/dpu_seg_rx")
     modelctr.setNewModel("ENet_cityscapes_pt","SEGMENTATION","/opt/xilinx/share/vitis_ai_library/models/B3136/")
     ```
+
+    ![](/media/figures/jupyter.png)
+
 ### Switch of Hardware design
 
 6. (Optional) load the hardware with the B4096 DPU: 
