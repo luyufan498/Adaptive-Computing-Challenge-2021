@@ -753,18 +753,66 @@ It is just a UI plugin to indicate if the branch is running.
 
 Download the source file: [gst_1080P.sh](./shell-scripts/gst_1080P.sh)
 
-This shell script can start video pipeline with the firmware of ***kv260-smartcam***.
+***Note:*** To run this shell script, firmware of ***kv260-smartcam*** has to be loaded.
 
-To start this 
+This script can take parameters as inputs, the following table shows the parameters:
+
+| options  | value | description |
+| ---------- | ----------------- | ----------- | 
+| -i | file / mipi | file is the default input source |
+| -f | path  | video path. It is mandatory when the input video source is file |
+| -r |reid / openpose / carid / yolo | the main application to run|
+
+ 
+For example, If you want to run ***Reid*** application with a video file as input. The command should be as follows:
+
+```shell
+<script_path>/gst_1080P.sh -i file -f <video_path> -r reid
+```
+
+If you want run ***Yolo*** with MIPI camera as input:
+
+
+
+```shell
+<script_path>/gst_1080P.sh -i mipi -r yolo
+```
 
 
 
 
+#### gst_4k.sh
+
+Download the source file: [gst_4k.sh](./shell-scripts/gst_4k.sh)
+
+***Note:***: to run this shell script, firmware of ***kv260-aibox-reid or cmpk4096*** has to be loaded.
 
 
+This script can take parameters as inputs, the following table shows the parameters:
+
+| options  | value | description |
+| ---------- | ----------------- | ----------- | 
+| -f | path  | video path.|
+| -r | reid / openpose | the application for branch 1.|
+| -b | N/A   | display background video for segmentation |
+| -s | N/A   | sync the inference branch |
+| 
+
+***Note***: due to the driver issues, ***-i*** is not supported in 4k mode. 
+
+For example, if you want to run an application with two branches: 1) Reid for people and 2) Yolo for Adas.
 
 
+```shell
+<script_path>/gst_4k.sh -f <video_path> -r reid 
+```
 
+If you don't want to overlay the segmentation results on original videos:
+
+
+```shell
+<script_path>/gst_4k.sh -f <video_path> -r reid -b
+```
 
 
 <!-- 
